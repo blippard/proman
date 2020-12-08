@@ -1,4 +1,5 @@
 import persistence
+import csv
 
 
 def get_card_status(status_id):
@@ -28,3 +29,33 @@ def get_cards_for_board(board_id):
             card['status_id'] = get_card_status(card['status_id'])  # Set textual status for the card
             matching_cards.append(card)
     return matching_cards
+
+
+def get_user(username):
+    with open('./data/user.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            if row[0] != 'id':
+                if username == row[1]:
+                    return row
+
+
+def get_user_list():
+    with open('./data/user.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        return list(csv_reader)
+
+
+def generate_id():
+    user_list = get_user_list()
+    id = str(int(user_list[-1][0]) + 1)
+    return id
+
+
+def add_user(username, password):
+    id = generate_id()
+    with open('./data/user.csv', mode='a') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',')
+        csv_writer.writerow([id, username, password])
+
+

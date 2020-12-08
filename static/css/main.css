@@ -1,3 +1,41 @@
 #boards {
     background-color: green;
 }
+
+#password {
+    margin-bottom: 10px;
+}
+
+#confirm_password {
+    margin-bottom: 20px;
+}
+
+#username {
+    margin-bottom: 10px;
+}
+
+html {
+    height: 100%;
+}
+
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+h2 {
+    margin: unset;
+    margin-bottom: 10px;
+}
+
+.registration {
+    background-color: #525900;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
