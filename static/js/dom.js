@@ -55,11 +55,23 @@ export let dom = {
         for (let card of cards){
             let board = document.querySelector(`#board${card.board_id}`);
             if (`board${card.board_id}` == `${board.id}`) {
-                if (!board.querySelector(`.${card.status_id}`)) {
-                    let cardColumn = document.createElement('div');
-                    cardColumn.setAttribute('class', `card-column ${card.status_id}`);
-                    board.appendChild(cardColumn);
+                if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
+                    let createCardColumn = document.createElement('div');
+                    let createColumnTitle = document.createElement('div');
+                    createCardColumn.setAttribute('class', `card-column ${dataHandler.camelize(card.status_id)}${card.board_id}`);
+                    createColumnTitle.setAttribute('class', 'card-column-title');
+                    createColumnTitle.innerText = `${card.status_id}`;
+                    createCardColumn.appendChild(createColumnTitle);
+                    board.appendChild(createCardColumn);
                 }
+                let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
+                let cardToAdd = `
+                    <div class="card mx-2">
+                        ${card.title}
+                    </div>
+                `;
+                console.log(board.id, `board${card.board_id}`, cardColumn, cardToAdd);
+                cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
             }
         }
     },
