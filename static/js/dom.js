@@ -35,6 +35,7 @@ export let dom = {
       boardList += `
                 <div class="board">
                     <div class="board-header">${board.title}</div>
+                    <button board-id="${board.id}">New Card</button>
                 </div>
             `;
     }
