@@ -35,8 +35,8 @@ export let dom = {
       // can change the HTML container types (not necessarily divs) later
       boardList += `
                 <div class="board">
-                    <div class="board-header" id-of-board="${board.id}">${board.title}</div>
                     <button board-id="${board.id}">New Card</button>
+                    <div class="board-header" id-of-board="${board.id}">${board.title}</div>
                 </div>
             `;
     }
@@ -60,11 +60,16 @@ export let dom = {
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
+
       for (let card of cards) {
         // can change the HTML container types (not necessarily divs) later
-        console.log(card);
+        let board = document.querySelector(`div[id-of-board="${card.board_id}"]`);
         let cardDiv = document.createElement('div');
-        cardDiv.setAttribute('')
+        cardDiv.setAttribute('class','default-card-class');
+        cardDiv.setAttribute('draggable','true');
+        cardDiv.innerText = card.title;
+        board.appendChild(cardDiv);
+
       }
 
     },
@@ -79,6 +84,7 @@ export let dom = {
             // createNewCard: function (cardTitle, boardId, statusId, callback)
             dataHandler.createNewCard(cardName, boardId, '0')
           }
+          location.reload();
         })
       }
     },
