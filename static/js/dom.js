@@ -17,6 +17,7 @@ export let dom = {
         });
       }
     });
+
   },
   loadBoards: function () {
     // retrieves boards and makes showBoards called
@@ -59,5 +60,16 @@ export let dom = {
         // it adds necessary event listeners also
     },
     // here comes more features
+    newCardEventListener: function () {
+      let newCardButtons = document.querySelectorAll("button[board-id]");
+      for (let button of newCardButtons) {
+        button.addEventListener('click', function () {
+          let boardId = button.getAttribute('board-id');
+          // createNewCard: function (cardTitle, boardId, statusId, callback)
+          dataHandler.createNewCard('testcard',boardId,'0')
+        })
+      }
+    }
+
 
 };
