@@ -66,7 +66,7 @@ export let dom = {
                 }
                 let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
                 let cardToAdd = `
-                    <div class="card mx-2 mb-2 border border-dark">
+                    <div class="card mx-2 mb-2 border border-dark text-center">
                         ${card.title}
                     </div>
                 `;
