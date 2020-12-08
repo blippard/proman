@@ -66,6 +66,17 @@ export let dataHandler = {
           });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
+        let newCardPostData = {'title': cardTitle, 'board_id': boardId, 'status_id':statusId}
+        fetch('/add-card', {
+            method: "POST",
+            body: JSON.stringify(newCardPostData),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+          }).then(response => {
+            callback(response);     // do something when the POST request has finished
+          });
         // creates new card, saves it and calls the callback function with its data
     }
     // here comes more features
