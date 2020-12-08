@@ -70,7 +70,6 @@ export let dom = {
                         ${card.title}
                     </div>
                 `;
-                console.log(board.id, `board${card.board_id}`, cardColumn, cardToAdd);
                 cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
             }
         }
