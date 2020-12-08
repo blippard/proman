@@ -22,10 +22,10 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <section class="board">
+                <section class="board mb-5">
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
-                        <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
+                        <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
                     </div>
                     <div class="row collapse" id="board${board.id}">
                         
@@ -58,7 +58,7 @@ export let dom = {
                 if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
                     let createCardColumn = document.createElement('div');
                     let createColumnTitle = document.createElement('div');
-                    createCardColumn.setAttribute('class', `card-column ${dataHandler.camelize(card.status_id)}${card.board_id}`);
+                    createCardColumn.setAttribute('class', `col ${dataHandler.camelize(card.status_id)}${card.board_id}`);
                     createColumnTitle.setAttribute('class', 'card-column-title');
                     createColumnTitle.innerText = `${card.status_id}`;
                     createCardColumn.appendChild(createColumnTitle);
