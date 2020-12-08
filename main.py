@@ -48,7 +48,7 @@ def add_a_new_board():
     # I don't think the above is a proper JSON server response with status: 400
 
 
-@app.route("/add-card", methods = ["POST"])
+@app.route("/add-card", methods=["POST"])
 @json_response
 def add_a_new_card():
     posted_data = request.json
