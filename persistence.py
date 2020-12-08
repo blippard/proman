@@ -113,10 +113,10 @@ def get_cards(force=False):
 def append_boards(board_dict):
     _append_csv(BOARDS_FILE, 'boards', board_dict)    
 
+def append_cards(board_dict):
+    _append_csv(CARDS_FILE, 'cards', board_dict)
 
 # if __name__ == "__main__":
-#     test_list_of_dict = [{'id': 1, 'title': 'alphabet'}, {'id': 1024, 'title': 'spam, bacon & eggs'}]
-#     single_dict = {'title': 'unorthodox', 'id': 2}
-#     test_file = './data/test.csv'
-#     _write_csv(test_file, 'boards', test_list_of_dict)
-#     _append_csv(test_file, 'boards', single_dict)
+#     _append_csv(file_name, data_type, row):
+
+
