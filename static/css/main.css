@@ -24,3 +24,11 @@
     background-color: turquoise;
 }
 
+.default-card-class {
+    background-color: aliceblue;
+    height: 40px;
+    width: 80px;
+    border-radius: 10px;
+    font-family: Lucinda Sans Unicode;
+    font-size: 18px;
+}
