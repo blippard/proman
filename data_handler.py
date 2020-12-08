@@ -54,6 +54,21 @@ def create_new_board(title):
     persistence.append_boards(row_dict)
 
 
-if __name__ == "__main__":
-    print(get_new_id_for_boards())
-    create_new_board('test')
+def get_new_id_for_cards(board_id):
+    return len(get_cards_for_board(board_id)) + 1
+
+
+def create_new_card(card_data):
+    order = 0
+    cards_dictionary = {'id': get_new_id_for_cards(card_data['board_id']),
+                'board_id': card_data['board_id'],
+                'title': card_data['title'],
+                'status_id': card_data['status_id'],
+                'order': order
+                }
+    persistence.append_cards(cards_dictionary)
+
+
+# for testing and debugging
+# if __name__ == "__main__":
+#     print(len(get_cards_for_board(1)))
