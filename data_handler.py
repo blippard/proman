@@ -48,9 +48,10 @@ def get_new_id_for_boards():
     max_id = max(id_list)
     return max_id + 1
 
-def create_new_board(title):
-    row_dict = {'id': get_new_id_for_boards(), 'title': title}
+def createback_new_board(title):
+    row_dict = {'id': str(get_new_id_for_boards()), 'title': title}
     persistence.append_boards(row_dict)
+    return row_dict
 
 
 if __name__ == "__main__":

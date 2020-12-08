@@ -6,16 +6,7 @@ export let dom = {
     // This function should run once, when the page is loaded.
     const newBoardBtn = document.querySelector(".add-board-btn");
     newBoardBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      let inputTitle = prompt("What is the title of the new board?");
-      if (!(inputTitle === "") && (inputTitle)) {
-        dataHandler.createNewBoard(inputTitle, (response) => {
-          //if (response.json() !== "") {
-          location.reload();
-          //}
-          // upon receiving a response, we refresh the page to update display
-        });
-      }
+      this.handleAddBoardClick(event);
     });
   },
   loadBoards: function () {
@@ -45,8 +36,8 @@ export let dom = {
             </div>
         `;
 
-    let boardsContainer = document.querySelector("#boards");
-    boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+    let boardsSupraContainer = document.querySelector("#boards");
+    boardsSupraContainer.insertAdjacentHTML("beforeend", outerHtml);
   },
   loadCards: function (boardId) {
     // retrieves cards and makes showCards called
@@ -56,4 +47,29 @@ export let dom = {
     // it adds necessary event listeners also
   },
   // here comes more features
+  handleAddBoardClick: function (clickEvent) {
+    clickEvent.preventDefault();
+    let inputTitle = prompt("What is the title of the new board?");
+    if (!(inputTitle === "") && inputTitle) {
+      dataHandler.createNewBoard(inputTitle, (jsonResponse) => {
+        if (jsonResponse.title) {
+          this.createNewChildBoard(jsonResponse.title);
+        } else {
+          window.alert(
+            "Could not get reply from server. Please wait and try again later."
+          );
+          // could maybe add a child that lives only until next _data update (next showBoards call)
+        }
+      });
+    }
+  },
+  createNewChildBoard: function (boardTitle) {
+    const boardInnerContainer = document.querySelector(".board-container");
+    let childHTMLText = `
+                <div class="board">
+                    <div class="board-header">${boardTitle}</div>
+                </div>
+            `;
+    boardInnerContainer.insertAdjacentHTML("beforeend", childHTMLText);
+  },
 };

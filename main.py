@@ -42,7 +42,7 @@ def add_a_new_board():
     """
     posted_data = request.json    
     if "title" in posted_data:        
-        data_handler.create_new_board(posted_data["title"])
+        return data_handler.createback_new_board(posted_data["title"])
     else:
         return "Mangled data", 400
     # I don't think the above is a proper JSON server response with status: 400
