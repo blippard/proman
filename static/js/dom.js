@@ -19,14 +19,21 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <li>${board.title}</li>
+                <div data-toggle="collapse" data-target="#testCollapse">
+                    fill
+                    <div class="collapse" id="testCollapse">
+                        <div class="card card-body">
+                            Test card
+                        </div>
+                    </div>
+                </div>
             `;
         }
 
         const outerHtml = `
-            <ul class="board-container">
+            <section class="board-container">
                 ${boardList}
-            </ul>
+            </section>
         `;
 
         let boardsContainer = document.querySelector('#boards');
