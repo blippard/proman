@@ -74,9 +74,7 @@ export let dataHandler = {
                 "Content-Type": "application/json",
                 "Accept": "application/json"
             }
-          }).then(response => {
-            callback(response);     // do something when the POST request has finished
-          });
+          })     // do something when the POST request has finished
         // creates new card, saves it and calls the callback function with its data
     }
     // here comes more features
