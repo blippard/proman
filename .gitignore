@@ -1,5 +1,11 @@
 /venv/
 
+# Temporary folder
+/temp/
+
+# Sample data files
+/data/
+
 # Flask stuff:
 instance/
 .webassets-cache
@@ -17,4 +23,5 @@ __pycache__/
 
 # IntelliJ
 /.idea/
-data/*.csv
+
+
