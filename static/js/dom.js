@@ -35,7 +35,7 @@ export let dom = {
       // can change the HTML container types (not necessarily divs) later
       boardList += `
                 <div class="board">
-                    <div class="board-header">${board.title}</div>
+                    <div class="board-header" id-of-board="${board.id}">${board.title}</div>
                     <button board-id="${board.id}">New Card</button>
                 </div>
             `;
@@ -53,11 +53,20 @@ export let dom = {
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(boardId, () => {});
+      fetch(`/get-boards/${boardId}`).then((response) => response.json()).then((data) => {
+        console.log(data);
+      })
     },
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
+      for (let card of cards) {
+        // can change the HTML container types (not necessarily divs) later
+        console.log(card);
+        let cardDiv = document.createElement('div');
+        cardDiv.setAttribute('')
+      }
+
     },
     // here comes more features
     newCardEventListener: function () {
@@ -72,7 +81,17 @@ export let dom = {
           }
         })
       }
+    },
+
+    getAllCards: function () {
+      fetch('/get-boards').then((response) => response.json()).then((data) => {
+        for (let board of data) {
+          fetch(`/get-cards/${board.id}`)
+              .then((response) => response.json())
+              .then((cardData) => {
+                this.showCards(cardData);
+              });
+          }
+      });
     }
-
-
 };
