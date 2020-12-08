@@ -22,7 +22,7 @@ export let dom = {
 
         for(let board of boards){
             boardList += `
-                <section class="board mb-5">
+                <section class="board col mb-5 border border-dark">
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
                         <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
@@ -58,15 +58,15 @@ export let dom = {
                 if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
                     let createCardColumn = document.createElement('div');
                     let createColumnTitle = document.createElement('div');
-                    createCardColumn.setAttribute('class', `col ${dataHandler.camelize(card.status_id)}${card.board_id}`);
-                    createColumnTitle.setAttribute('class', 'card-column-title');
+                    createCardColumn.setAttribute('class', `col border border-dark p-0 ${dataHandler.camelize(card.status_id)}${card.board_id}`);
+                    createColumnTitle.setAttribute('class', 'card-column-title text-center border-bottom border-dark mb-2');
                     createColumnTitle.innerText = `${card.status_id}`;
                     createCardColumn.appendChild(createColumnTitle);
                     board.appendChild(createCardColumn);
                 }
                 let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
                 let cardToAdd = `
-                    <div class="card mx-2">
+                    <div class="card mx-2 mb-2 border border-dark">
                         ${card.title}
                     </div>
                 `;
