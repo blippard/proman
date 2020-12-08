@@ -54,13 +54,15 @@ def create_new_board(title):
     persistence.append_boards(row_dict)
 
 
-def get_new_id_for_cards(board_id):
-    return len(get_cards_for_board(board_id)) + 1
+def get_new_id_for_cards():
+    card_id = len(persistence.get_cards()) + 1
+    persistence.clear_cache()
+    return card_id
 
 
 def create_new_card(card_data):
     order = 0
-    cards_dictionary = {'id': get_new_id_for_cards(card_data['board_id']),
+    cards_dictionary = {'id': get_new_id_for_cards(),
                 'board_id': card_data['board_id'],
                 'title': card_data['title'],
                 'status_id': card_data['status_id'],
@@ -69,6 +71,6 @@ def create_new_card(card_data):
     persistence.append_cards(cards_dictionary)
 
 
-# for testing and debugging
+# # for testing and debugging
 # if __name__ == "__main__":
-#     print(len(get_cards_for_board(1)))
+#     print(len(persistence.get_cards())+1)
