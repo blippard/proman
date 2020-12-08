@@ -65,8 +65,11 @@ export let dom = {
       for (let button of newCardButtons) {
         button.addEventListener('click', function () {
           let boardId = button.getAttribute('board-id');
-          // createNewCard: function (cardTitle, boardId, statusId, callback)
-          dataHandler.createNewCard('testcard',boardId,'0')
+          let cardName = prompt("Name your card");
+          if (!(cardName === "") && (cardName)) {
+            // createNewCard: function (cardTitle, boardId, statusId, callback)
+            dataHandler.createNewCard(cardName, boardId, '0')
+          }
         })
       }
     }
