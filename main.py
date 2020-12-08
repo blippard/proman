@@ -48,6 +48,17 @@ def add_a_new_board():
     # I don't think the above is a proper JSON server response with status: 400
 
 
+# @app.route("/add-card", methods = ["POST"])
+# @json_response
+# def add_a_new_card():
+#     posted_data = request.json
+#     if "title" in posted_data:
+#         data_handler.create_new_card(posted_data)
+#     else:
+#         return "Mangled data", 400
+
+
+
 def main():
     app.run(debug=True)
 
