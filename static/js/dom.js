@@ -34,6 +34,7 @@ export let dom = {
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
+        dataHandler.getCardsByBoardId(boardId, () => {});
     },
     showCards: function (cards) {
         // shows the cards of a board
