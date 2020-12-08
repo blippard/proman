@@ -2,32 +2,49 @@
 import { dataHandler } from "./data_handler.js";
 
 export let dom = {
-    init: function () {
-        // This function should run once, when the page is loaded.
-    },
-    loadBoards: function () {
-        // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
-            dom.showBoards(boards);
+  init: function () {
+    // This function should run once, when the page is loaded.
+    const newBoardBtn = document.querySelector(".add-board-btn");
+    newBoardBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      let inputTitle = prompt("What is the title of the new board?");
+      if (!(inputTitle === "") && (inputTitle)) {
+        dataHandler.createNewBoard(inputTitle, (response) => {
+          //if (response.json() !== "") {
+          location.reload();
+          //}
+          // upon receiving a response, we refresh the page to update display
         });
-    },
-    showBoards: function (boards) {
-        // shows boards appending them to #boards div
-        // it adds necessary event listeners also
+      }
+    });
+  },
+  loadBoards: function () {
+    // retrieves boards and makes showBoards called
+    dataHandler.getBoards(function (boards) {
+      dom.showBoards(boards);
+    });
+  },
+  showBoards: function (boards) {
+    // shows boards appending them to #boards div
+    // it adds necessary event listeners for (each board) also
 
-        let boardList = '';
+    let boardList = "";
 
-        for(let board of boards){
-            boardList += `
-                <li>${board.title}</li>
+    for (let board of boards) {
+      // can change the HTML container types (not necessarily divs) later
+      boardList += `
+                <div class="board">
+                    <div class="board-header">${board.title}</div>
+                </div>
             `;
-        }
+    }
 
-        const outerHtml = `
-            <ul class="board-container">
+    const outerHtml = `
+            <div class="board-container">
                 ${boardList}
-            </ul>
+            </div>
         `;
+
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
@@ -41,4 +58,5 @@ export let dom = {
         // it adds necessary event listeners also
     },
     // here comes more features
+
 };

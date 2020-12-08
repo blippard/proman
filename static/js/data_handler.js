@@ -51,8 +51,19 @@ export let dataHandler = {
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
     },
-    createNewBoard: function (boardTitle, callback) {
-        // creates new board, saves it and calls the callback function with its data
+    createNewBoard: function (boardTitle, callback) {        
+        // creates new board, makes a request to save it and calls the callback function with its data
+        let dataToPost = {"title": boardTitle}    
+        fetch('/add-board', {
+            method: "POST", 
+            body: JSON.stringify(dataToPost),
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+          }).then(response => {
+            callback(response);     // do something when the POST request has finished
+          });
     },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
