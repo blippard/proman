@@ -1,3 +1,26 @@
 #boards {
-    background-color: green;
+    background-color: green;    
 }
+
+.board-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.board {
+    background-color: coral;
+    min-height: 12rem;  /* rem = relative em-dashes (makes em-dashes big for readability) */
+    height: max-content;
+    margin: 0.5rem;
+}
+
+.top-btn-container {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 0.5rem;
+}
+
+.add-board-btn {
+    background-color: turquoise;
+}
+
