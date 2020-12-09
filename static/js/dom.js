@@ -103,13 +103,14 @@ export let dom = {
                 }
                 let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
                 let cardToAdd = `
-                    <div draggable="true" class="card mx-2 mb-2 border border-dark text-center">
+                    <div id="${card.id}" draggable="true" class="card mx-2 mb-2 border border-dark text-center">
                         ${card.title}
                     </div>
                 `;
                 cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
             }
         }
+        this.createDropZone();
     },
     handleAddBoardClick: function (clickEvent) {
     clickEvent.preventDefault();
@@ -127,5 +128,30 @@ export let dom = {
       });
     }
   },
+    createDropZone: function () {
+        let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
+        let cards = document.querySelectorAll('.card.mx-2.mb-2.border.border-dark.text-center');
+
+        for (let card of cards) {
+            card.addEventListener('dragstart', event => {
+                event.dataTransfer.setData("text/plain", card.id);
+                console.log(card.id);
+            });
+        };
+
+        for (let zone of dropZone) {
+            zone.addEventListener('dragover', event => {
+                event.preventDefault();
+            })
+        };
+
+        for (let zone of dropZone) {
+            zone.addEventListener('drop', event => {
+                let droppedElementId = event.dataTransfer.getData("text/plain");
+                let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
+                zone.appendChild(droppedElement);
+            });
+        }
+    }
     // here comes more features
 };
