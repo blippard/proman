@@ -7,6 +7,7 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
+        this.removeAllBoardElements();
         dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
             for (let board of boards) {
@@ -74,4 +75,10 @@ export let dom = {
         }
     },
     // here comes more features
+    removeAllBoardElements: function () {
+        let allBoards = document.querySelector('#boards');
+        if (allBoards) {
+            allBoards.innerHTML = '';
+        }
+    },
 };
