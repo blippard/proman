@@ -71,4 +71,6 @@ export let dataHandler = {
     // creates new card, saves it and calls the callback function with its data
   },
   // here comes more features
+  deleteBoard: function (boardID, callback) {},
+  
 };
