@@ -48,4 +48,3 @@ def get_board_statuses(boardId):
                 if status['id'] in board_statuses:
                     matching_statuses.append(status)
     return matching_statuses
-print(get_boards())
