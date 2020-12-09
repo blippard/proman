@@ -63,3 +63,26 @@ var Snow = {
 
 Snow.init();
 
+function lastChristmas() {
+    let audio = document.getElementById('audio');
+     let myAudio = document.createElement("audio");
+     let play = false;
+     audio.onclick = function () {
+         myAudio.src = "/static/css/music/wham.mp3";
+         if (play === false) {
+             myAudio.play();
+             play = true;
+             audio.src = "/static/css/images/mute1.png";
+         }
+     else
+         {
+             myAudio.pause();
+             myAudio.currentTime = 0;
+             play = false;
+             audio.src = "/static/css/images/audio.png";
+         }
+     }
+
+};
+
+lastChristmas();
