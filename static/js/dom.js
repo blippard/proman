@@ -96,6 +96,7 @@ export let dom = {
                     let createCardColumn = document.createElement('div');
                     let createColumnTitle = document.createElement('div');
                     createCardColumn.setAttribute('class', `col border border-dark p-0 ${dataHandler.camelize(card.status_id)}${card.board_id}`);
+                    createCardColumn.setAttribute('status', `${dataHandler.camelize(card.status_id)}`)
                     createColumnTitle.setAttribute('class', 'card-column-title text-center border-bottom border-dark mb-2');
                     createColumnTitle.innerText = `${card.status_id}`;
                     createCardColumn.appendChild(createColumnTitle);
@@ -135,7 +136,6 @@ export let dom = {
         for (let card of cards) {
             card.addEventListener('dragstart', event => {
                 event.dataTransfer.setData("text/plain", card.id);
-                console.log(card.id);
             });
         };
 
@@ -147,9 +147,24 @@ export let dom = {
 
         for (let zone of dropZone) {
             zone.addEventListener('drop', event => {
+                let zoneStatus = zone.getAttribute('status');
                 let droppedElementId = event.dataTransfer.getData("text/plain");
                 let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
                 zone.appendChild(droppedElement);
+
+                if (zoneStatus == 'new') {
+                    droppedElement.setAttribute('class', 'new');
+                } else if (zoneStatus == 'inProgress') {
+                    droppedElement.setAttribute('class', 'inProgress');
+                } else if (zoneStatus == 'testing') {
+                    droppedElement.setAttribute('class', 'testing');
+                } else if (zoneStatus == 'done') {
+                    droppedElement.setAttribute('class', 'done');
+                }
+
+
+
+
             });
         }
     }
