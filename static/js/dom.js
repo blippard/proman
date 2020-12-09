@@ -34,7 +34,7 @@ export let dom = {
                 <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
-                        <button class="btn btn-dark">Add column</button>
+                        <button class="btn btn-dark add-column">Add column</button>
                         <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
                     </div>
                     <div class="row collapse" id="board${board.id}">
@@ -52,6 +52,10 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        let addColumnButtons = document.querySelectorAll('.add-column');
+        for (let button of addColumnButtons) {
+            button.addEventListener('click', (event) => this.initAddColumn(event));
+        }
     },
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
@@ -82,4 +86,10 @@ export let dom = {
             allBoards.innerHTML = '';
         }
     },
+    initAddColumn: function (event) {
+        let boardSection = event.target.parentNode.parentNode
+        if (boardSection.tagName === 'SECTION' && boardSection.classList.contains('board')) {
+            console.log(event.target.parentNode.parentNode);
+        }
+    }
 };
