@@ -48,3 +48,45 @@ def get_board_statuses(boardId):
                 if status['id'] in board_statuses:
                     matching_statuses.append(status)
     return matching_statuses
+
+
+def get_new_id_for_cards():
+    card_id = len(persistence.get_cards()) + 1
+    persistence.clear_cache()
+    return card_id
+
+
+def create_new_card(card_data):
+    order = 0
+    cards_dictionary = {'id': get_new_id_for_cards(),
+                'board_id': card_data['board_id'],
+                'title': card_data['title'],
+                'status_id': card_data['status_id'],
+                'order': order
+                }
+    persistence.append_cards(cards_dictionary)
+
+
+def get_new_id_for_boards():
+    """
+    Gets a new (valid) id for a board
+    :return: int representing the next available ID
+    """
+    all_boards = get_boards()
+    id_list = []
+    for board in all_boards:
+        try:
+           new_id = int(board['id'])
+        except (ValueError, TypeError):
+            pass
+        else:
+            id_list.append(new_id)
+
+    max_id = max(id_list)
+    return max_id + 1
+
+
+def createback_new_board(title):
+    row_dict = {'id': str(get_new_id_for_boards()), 'title': title, 'board_statuses': '0,1,2,3'}
+    persistence.append_boards(row_dict)
+    return row_dict
