@@ -16,10 +16,22 @@
     margin: 0.5rem;
 }
 
+.new {
+    width: inherit;
+    background-color: red;
+}
 
-.drop-zone--over {
-    border: 4px solid #cdcdcd;
-    margin: 5px;
-    border-radius: var(--border-radius);
-    background: azure;
+.inProgress {
+    width: inherit;
+    background-color: orange;
+}
+
+.testing {
+    width: inherit;
+    background-color: lightblue;
+}
+
+.done {
+    width: inherit;
+    background-color: limegreen;
 }
