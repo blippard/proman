@@ -3,6 +3,9 @@ import csv
 STATUSES_FILE = './data/statuses.csv'
 BOARDS_FILE = './data/boards.csv'
 CARDS_FILE = './data/cards.csv'
+STATUSES_HEADER = ['id', 'title']
+BOARDS_HEADER = ['id', 'title', 'board_statuses']
+CARDS_HEADER = ['id', 'board_id', 'title', 'status_id', 'order']
 
 _cache = {}  # We store cached data in this dict to avoid multiple file readings
 
@@ -32,6 +35,26 @@ def _get_data(data_type, file, force):
     if force or data_type not in _cache:
         _cache[data_type] = _read_csv(file)
     return _cache[data_type]
+
+
+def append_row(data: dict, file_name):
+    new_row = []
+    if file_name == './data/boards.csv':
+        headers = BOARDS_HEADER
+    elif file_name == './data/cards.csv':
+        headers = CARDS_HEADER
+    elif file_name == './data/statuses.csv':
+        headers = STATUSES_HEADER
+    else:
+        return
+    for header in headers:
+        for elem in data:
+            if elem == header:
+                new_row.append(data[elem])
+                continue
+    with open(file_name, 'a+') as file:
+        csv_writer = csv.writer(file)
+        csv_writer.writerow(new_row)
 
 
 def clear_cache():
