@@ -48,9 +48,9 @@ def append_row(data: dict, file_name):
     else:
         return
     for header in headers:
-        for elem in data:
-            if elem == header:
-                new_row.append(data[elem])
+        for key in data:
+            if key == header:
+                new_row.append(data[key])
                 continue
     with open(file_name, 'a+') as file:
         csv_writer = csv.writer(file)
