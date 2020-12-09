@@ -37,6 +37,14 @@ def _get_data(data_type, file, force):
     return _cache[data_type]
 
 
+def get_highest_id(file_name):
+    highest_id = 0
+    all_rows = _read_csv(file_name)
+    for row in all_rows:
+        highest_id = int(row['id']) if int(row['id']) > highest_id else highest_id
+    return str(highest_id)
+
+
 def append_row(data: dict, file_name):
     new_row = []
     if file_name == './data/boards.csv':
