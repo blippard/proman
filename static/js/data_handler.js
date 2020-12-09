@@ -27,10 +27,7 @@ export let dataHandler = {
             },
             body: JSON.stringify(data),
         })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
+            .then(callback)
             .catch((error) => {
                 console.log('Error:', error);
             });
