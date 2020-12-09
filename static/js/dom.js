@@ -51,7 +51,7 @@ export let dom = {
         this.addCardEventListener();
         },
     addCardEventListener: function ()  {
-        let newCardBtns = document.querySelectorAll('.new-card-btn');
+        let newCardBtns = document.querySelectorAll('.new-card-btn ');
 
         for (let cardBtn of newCardBtns) {
             let boardId = cardBtn.getAttribute('board-id');

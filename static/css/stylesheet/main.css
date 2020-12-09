@@ -15,7 +15,7 @@ html, body, .button, .log-button, .board-header {
    cursor: url(../images/cursor.cur), default;
 }
 
-body {
+body, html  {
     background-color:rgb(55, 0, 252);
 	 font-family: 'Minecraftia', cursive;
 
@@ -48,7 +48,6 @@ section.board{
 .board-header{
     height: 50px;
     background: #999 url('https://i.ibb.co/rb2TWXL/bgbtn.png') ;
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .board-title{
@@ -96,27 +95,11 @@ section.board{
     position: relative;
     background: #222;
     color: #fff;
-    border-radius: var(--border-radius);
     margin: 4px 0;
     padding: 4px;
     cursor: url(../images/grab.cur), default;
 }
 
-.board-column:nth-of-type(1) .card{
-    background: var(--status-1);
-}
-
-.board-column:nth-of-type(2) .card{
-    background: var(--status-2);
-}
-
-.board-column:nth-of-type(3) .card{
-    background: var(--status-3);
-}
-
-.board-column:nth-of-type(4) .card{
-    background: var(--status-4);
-}
 
 .card-remove{
     display: block;
@@ -144,12 +127,10 @@ section.board{
 	 display: inline;
 	 align-items: center;
 }
- .center .text-center {
-	 text-align: center;
-	 width: 100%;
-}
+
  p {
 	 display: inline-block;
+     font-family: 'Minecraftia', cursive;
 
 }
 
@@ -192,9 +173,7 @@ section.board{
 
 
 /* Minecraft Button */
- .mc-button {
-	 height: 26px;
-	 width: 180px;
+ .new-card-btn, .mc-button {
      color: #ddd;
 	 text-shadow: 2px 2px #000A;
 	 box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
@@ -205,23 +184,22 @@ section.board{
       display: inline-block;
      text-align: center;
      top: -3px;
+     height:37px;
+	width: 180px;
+    font-family: 'Minecraftia', cursive;
+    font-size: 16px;
 
 }
- .mc-button:hover  {
+ .new-card-btn:hover, .mc-button:hover  {
 	 background: rgba(100, 100, 255, 0.45);
 	 text-shadow: 2px 2px #202013CC;
 	 color: #ffffa0;
 }
- .mc-button:active {
+ .new-card-btn:active, .mc-button:active {
 	 box-shadow: inset -2px -4px #0004, inset 2px 2px #fff5;
 }
 
-.board-button {
-    height:37px;
-	width: 180px;
-    font-family: 'Minecraftia', cursive;
-    font-size: 16px;
-}
+
 
 .log-button {
     height:37px;
@@ -234,3 +212,13 @@ section.board{
     width: 100px;
     height: 100px;
 }
+
+.card {
+    font-family: 'Minecraftia', cursive;
+     color: #787777;
+    text-shadow: none;
+}
+
+ .show, .board-title {
+      font-family: 'Minecraftia', cursive;
+ }
