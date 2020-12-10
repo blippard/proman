@@ -55,7 +55,7 @@ def login():
         password = request.json['password']
         user = data_handler.get_user_for_login(username, password)
         if user:
-            return 'Success'
+            return user[0]
         else:
             return 'Failure'
 

@@ -49,6 +49,7 @@ export let dom = {
                 if (response === 'Failure') {
                     alert('Invalid username or password!')
                 } else {
+                    sessionStorage.setItem("userId", response);
                     loginContainer.style.display = 'none';
                     menuButton.style.display = 'block';
                     boards.style.display = 'block';
