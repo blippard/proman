@@ -75,8 +75,9 @@ export let dom = {
                     form.addEventListener('submit', event => {
                         event.preventDefault();
                         const formData = new FormData(event.target)
+                        const formSheet = document.querySelector('form');
                         dataHandler.createNewCard(formData.get('title'), boardId, formData.get('status'));
-
+                        formSheet.remove();
                     })
             })
         }
