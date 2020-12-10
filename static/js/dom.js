@@ -1,13 +1,50 @@
 // It uses data_handler.js to visualize elements
-import { dataHandler } from "./data_handler.js";
+import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
+        let registrationButton = document.getElementById('registration-button');
+        let registerSubmit = document.getElementById('reg-button')
+        registrationButton.addEventListener('click', () => {
+            let registrationContainer = document.getElementById('registration-container');
+            let menuButton = document.getElementById('menu');
+            let boards = document.getElementById('boards');
+            registrationContainer.style.display = 'flex';
+            menuButton.style.display = 'none';
+            boards.style.display = 'none';
+        });
+        registerSubmit.addEventListener('click', () => {
+            let registrationContainer = document.getElementById('registration-container')
+            let menuButton = document.getElementById('menu');
+            let boards = document.getElementById('boards');
+            let username = document.getElementById('username');
+            let password = document.getElementById('password');
+            let confirmPassword = document.getElementById('confirm_password');
+            registrationContainer.style.display = 'none';
+            menuButton.style.display = 'block';
+            boards.style.display = 'block';
+            this.postdata('http://127.0.0.1:5000/registration', {
+                username: username.value,
+                password: password.value,
+                confirmPassword: confirmPassword.value})
+        });
         // This function should run once, when the page is loaded.
+    },
+    postdata: async function (url = '', data) {
+        console.log(data)
+        const response = await fetch(url,{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            }
+        )
+        return response.json()
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function(boards){
+        dataHandler.getBoards(function (boards) {
             dom.showBoards(boards);
         });
     },
@@ -17,7 +54,7 @@ export let dom = {
 
         let boardList = '';
 
-        for(let board of boards){
+        for (let board of boards) {
             boardList += `
                 <li>${board.title}</li>
             `;

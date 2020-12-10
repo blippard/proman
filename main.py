@@ -37,9 +37,10 @@ def get_cards_for_board(board_id: int):
 @json_response
 def registration():
     if request.method == 'POST':
-        new_user = request.form.get('username')
-        plain_text_password = request.form.get('password')
-        confirm_password = request.form.get('confirm_password')
+        print(request.json)
+        new_user = request.json['username']
+        plain_text_password = request.json['password']
+        confirm_password = request.json['confirmPassword']
         if plain_text_password == confirm_password:
             if data_handler.get_user(new_user):
                 return 'Failure'
