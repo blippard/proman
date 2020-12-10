@@ -8,7 +8,7 @@
 }
 
 .board {
-    background-color: coral;
+    background-color: limegreen;
     min-height: 12rem;  /* rem = relative em-dashes (makes em-dashes big for readability) */
     height: max-content;
     margin: 0.5rem;
@@ -18,7 +18,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: green;
+    background-color: #0ea50e;
 }
 
 .new-card-btn {
@@ -32,9 +32,9 @@
 .remove-board-btn {
     font-size: 10px;
     font-family: KacstFarsi;
-    border-radius: 50%;
+    border-radius: 25%;
     background-color: darkolivegreen;
-    color: pink;
+    color: red;
 }
 
 .top-btn-container {
