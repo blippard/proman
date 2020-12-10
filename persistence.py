@@ -53,6 +53,13 @@ def check_if_status_exists(title):
     return False
 
 
+def get_status_id(title):
+    all_rows = _read_csv(STATUSES_FILE)
+    for row in all_rows:
+        if row['title'] == title:
+            return row['id']
+
+
 def append_row(data: dict, file_name):
     new_row = []
     if file_name == './data/boards.csv':
