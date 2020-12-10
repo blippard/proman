@@ -90,3 +90,16 @@ def createback_new_board(title):
     row_dict = {'id': str(get_new_id_for_boards()), 'title': title, 'board_statuses': '0,1,2,3'}
     persistence.append_boards(row_dict)
     return row_dict
+
+
+def update_cards(card_update_data):
+    cards = persistence.get_cards()
+    for card in cards:
+        if card['id'] == card_update_data['id']:
+            card['status_id'] = card_update_data['status']
+    all_cards_list = [list(card.values()) for card in cards]
+    all_cards_list.insert(0, persistence.CARDS_HEADER)
+    persistence.overwrite_csv(persistence.CARDS_FILE, all_cards_list)
+
+# if __name__ == '__main__':
+#     pass
