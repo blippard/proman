@@ -90,3 +90,24 @@ def createback_new_board(title):
     row_dict = {'id': str(get_new_id_for_boards()), 'title': title, 'board_statuses': '0,1,2,3'}
     persistence.append_boards(row_dict)
     return row_dict
+
+
+def rename_board(board_data):
+    id = board_data['board_id']
+    new_title = board_data['title']
+    persistence.rename_board(id, new_title)
+    return row_dict
+
+
+def rename_column(column_data):
+    old_name = column_data['old-name']
+    new_title = column_data['title']
+    persistence.rename_column(old_name, new_title)
+    return row_dict
+
+
+def rename_card(card_data):
+    card_id = card_data['card-id']
+    new_title = card_data['title']
+    persistence.rename_card(card_id, new_title)
+    return row_dict

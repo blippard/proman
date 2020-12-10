@@ -49,6 +49,36 @@ def add_a_new_card():
         return "Mangled data", 400
 
 
+@app.route("/rename-board", methods=["POST"])
+@json_response
+def rename_board():
+    posted_data = request.json
+    if "title" in posted_data:
+        data_handler.rename_board(posted_data)
+    else:
+        return "Mangled data", 400
+
+
+@app.route("/rename-column", methods=["POST"])
+@json_response
+def rename_column():
+    posted_data = request.json
+    if "title" in posted_data:
+        data_handler.rename_column(posted_data)
+    else:
+        return "Mangled data", 400
+
+
+@app.route("/rename-card", methods=["POST"])
+@json_response
+def rename_card():
+    posted_data = request.json
+    if "title" in posted_data:
+        data_handler.rename_card(posted_data)
+    else:
+        return "Mangled data", 400
+
+
 @app.route("/add-board", methods=["POST"])
 @json_response
 def add_a_new_board():

@@ -30,6 +30,20 @@ export let dataHandler = {
       .then((response) => response.json()) // parse the response as JSON
       .then((json_response) => callback(json_response)); // Call the `callback` with the returned object
   },
+    _api_put: function (url, data, callback) {
+        fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        }).then(function (response) {
+            if (response.status !== 200) {
+                console.log(`Looks like there was a problem. Status code: ${response.status}`);
+                return;
+            }
+        }).then(callback)
+    },
     init: function () {
     },
     getBoards: function (callback) {
@@ -80,6 +94,24 @@ export let dataHandler = {
         let newCardPostData = {'title': cardTitle, 'board_id': boardId, 'status_id':statusId}
         this._api_post('/add-card', newCardPostData, (jsonResponse) => {
         this._data["cards"].push(jsonResponse);
+        })
+    },
+    renameBoard: function (boardId, title, callback) {
+        let newNameBoard = {'board_id': boardId, 'title': title};
+        this._api_post('/rename-board', newNameBoard, (jsonResponse) => {
+            this._data["boards"].push(jsonResponse);
+        })
+    },
+    renameColumn: function (oldName, title, callback) {
+        let newNameColumn = {'old-name': oldName, 'title': title};
+        this._api_post('/rename-column', newNameColumn, (jsonResponse) => {
+            this._data["statuses"].push(jsonResponse);
+        })
+    },
+    renameCard: function (cardId, title, callback) {
+        let newNameColumn = {'card-id': cardId, 'title': title};
+        this._api_post('/rename-column', newNameCard, (jsonResponse) => {
+            this._data["statuses"].push(jsonResponse);
         })
     },
     // here comes more features

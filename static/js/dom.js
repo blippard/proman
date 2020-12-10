@@ -31,6 +31,7 @@ export let dom = {
                         <span class="board-title">${board.title}</span>
                         <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
+                        <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">Rename Board</button>
                     </div>
                     <div class="row collapse" id="board${board.id}">
                         
@@ -49,6 +50,7 @@ export let dom = {
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
 
         this.addCardEventListener();
+        this.newNameBoardEventListener();
         },
     addCardEventListener: function ()  {
         let newCardBtns = document.querySelectorAll('.new-card-btn ');
@@ -66,7 +68,7 @@ export let dom = {
                     <option value="2">Testing</option>
                     <option value="3">Done</option>
                 </select>
-                <input type="submit" id="new-card-submit">
+                <input type="submit" id="new-card-submit" value="Save">
                 </form>
                 `
                 cardBtn.insertAdjacentHTML("afterend", cardForm);
@@ -80,6 +82,29 @@ export let dom = {
         }
 
     },
+
+        newNameBoardEventListener: function ()  {
+        let renameBoardBtn = document.querySelectorAll('.rename-board-btn');
+        for (let boardBtn of renameBoardBtn) {
+            let boardId = boardBtn.getAttribute('board-id');
+            let boardTitle = boardBtn.getAttribute('board-title');
+            boardBtn.addEventListener('click', function () {
+                let cardForm = `
+                <form>
+                <input type="text" name="title" placeholder="${boardTitle}" value="${boardTitle}">
+                <input type="submit" id="new-board-name-submit" value="Save">
+                </form>
+                `
+                boardBtn.insertAdjacentHTML("afterend", cardForm);
+                let form = document.querySelector('form')
+                    form.addEventListener('submit', event => {
+                        const formData = new FormData(event.target)
+                        dataHandler.renameBoard(boardId, formData.get('title'));
+                    })
+            })
+        }
+    },
+
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId,function(cards){
@@ -100,15 +125,53 @@ export let dom = {
                     createColumnTitle.innerText = `${card.status_id}`;
                     createCardColumn.appendChild(createColumnTitle);
                     board.appendChild(createCardColumn);
+                    createColumnTitle.addEventListener("click", function () {
+                        let oldName = `${card.status_id}`;
+                        let columnTitle = `${card.status_id}`;
+                        let addName = `
+                            <form>
+                            <input type="text" name="title" placeholder="${columnTitle}" value="${columnTitle}">
+                            <input type="submit" id="new-board-name-submit" value="Save">
+                            </form>
+                            `
+                        createColumnTitle.insertAdjacentHTML("afterend", addName);
+                        let form = document.querySelector('form')
+                        form.addEventListener('submit', event => {
+                            const formData = new FormData(event.target)
+                            dataHandler.renameColumn(oldName, formData.get('title'));
+                        })
+                    });
                 }
                 let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
                 let cardToAdd = `
-                    <div class="card mx-2 mb-2 border border-dark text-center">
+                    <div class="card" card-id="${card.id}" card-title="${card.title}">
                         ${card.title}
+                        <button class="rename-card-btn" card-id="${card.id}" card-title="${card.title}">Rename</button>
                     </div>
+                
                 `;
                 cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
-            }
+
+                let cards = document.querySelectorAll('.rename-card-btn');
+                for (let cardBtn of cards) {
+                    let cardId = cardBtn.getAttribute('card-id');
+                    let cardTitle = cardBtn.getAttribute('card-title');
+                    cardBtn.addEventListener('click', function () {
+                        let cardForm = `
+                        <form>
+                        <input type="text" name="title" placeholder="${cardTitle}" value="${cardTitle}">
+                        <input type="submit" id="new-card-name-submit" value="Save">
+                        </form>
+                        `
+                        cardBtn.insertAdjacentHTML("afterend", cardForm);
+                        let form = document.querySelector('form')
+                            form.addEventListener('submit', event => {
+                                const formData = new FormData(event.target)
+                                dataHandler.renameCard(cardId, formData.get('title'));
+                            })
+                    })
+                }
+                    }
         }
     },
     handleAddBoardClick: function (clickEvent) {
