@@ -92,6 +92,7 @@ export let dom = {
         if (boardSection.tagName === 'SECTION' && boardSection.classList.contains('board')) {
             document.querySelector('#submitModalTitle').innerText = 'Add new column';
             document.querySelector('#submitModalInputPrepend').innerText = 'Column name:';
+            document.querySelector('#submitModalInput').value = '';
             let submitModal = document.querySelector('#submitModal');
             submitModal.dataset.boardId = event.target.dataset.boardId;
             submitModal.dataset.submitAction = event.target.dataset.submitAction;
