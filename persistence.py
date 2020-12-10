@@ -45,6 +45,14 @@ def get_highest_id(file_name):
     return str(highest_id)
 
 
+def check_if_status_exists(title):
+    all_rows = _read_csv(STATUSES_FILE)
+    for row in all_rows:
+        if row['title'] == title:
+            return True
+    return False
+
+
 def append_row(data: dict, file_name):
     new_row = []
     if file_name == './data/boards.csv':
