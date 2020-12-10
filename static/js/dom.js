@@ -322,17 +322,37 @@ export let dom = {
                 let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
                 zone.appendChild(droppedElement);
 
-                if (zoneStatus == 'new') {
-                    droppedElement.setAttribute('class', 'new');
-                } else if (zoneStatus == 'inProgress') {
-                    droppedElement.setAttribute('class', 'inProgress');
-                } else if (zoneStatus == 'testing') {
-                    droppedElement.setAttribute('class', 'testing');
-                } else if (zoneStatus == 'done') {
-                    droppedElement.setAttribute('class', 'done');
-                }
-    
-            });
-        }
-    },
+                    if (zoneStatus == 'new') {
+                        droppedElement.setAttribute('class', 'new');
+                        let postData = {'id': droppedElementId, 'status': '0'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    } else if (zoneStatus == 'inProgress') {
+                        droppedElement.setAttribute('class', 'inProgress');
+                        let postData = {'id': droppedElementId, 'status': '1'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    } else if (zoneStatus == 'testing') {
+                        droppedElement.setAttribute('class', 'testing');
+                        let postData = {'id': droppedElementId, 'status': '2'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    } else if (zoneStatus == 'done') {
+                        droppedElement.setAttribute('class', 'done');
+                        let postData = {'id': droppedElementId, 'status': '3'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    }
+
+                });
+            }
+        },
 };
