@@ -67,6 +67,7 @@ def create_new_card(card_data):
                         'order': order
                         }
     persistence.append_cards(cards_dictionary)
+    return cards_dictionary
 
 
 def get_new_id_for_boards():
@@ -162,6 +163,7 @@ def get_user_for_login(username, password):
                     if verify_password(password, row[2]):
                         return row
 
+
 def update_cards(card_update_data):
     cards = persistence.get_cards()
     for card in cards:
@@ -170,6 +172,35 @@ def update_cards(card_update_data):
     all_cards_list = [list(card.values()) for card in cards]
     all_cards_list.insert(0, persistence.CARDS_HEADER)
     persistence.overwrite_csv(persistence.CARDS_FILE, all_cards_list)
+
+
+def pop_from_list_board(board_id, force=False):
+    all_boards = persistence.get_boards(force=True)
+    id_list = [row["id"] for row in all_boards]
+    try:
+        the_index = id_list.index(str(board_id))
+    except (TypeError, ValueError):
+        raise
+    
+    del id_list
+    if force:        
+        # we just delete from boards DB and not from other DBs
+        pass
+    else:        
+        remove_all_cards_of_board(board_id)
+
+    row_dict = all_boards.pop(the_index)    
+    persistence.write_boards(all_boards)
+
+    return row_dict
+
+
+def remove_all_cards_of_board(board_id):
+    all_cards = persistence.get_cards(force=True)    
+    new_cards = [row for row in all_cards if row["board_id"] != str(board_id)]
+    del all_cards
+    persistence.write_cards(new_cards)
+            
 
 # if __name__ == '__main__':
 #     pass

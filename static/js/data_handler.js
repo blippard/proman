@@ -123,12 +123,22 @@ export let dataHandler = {
     //     })
     // },
     // here comes more features
+    deleteBoard: function (boardId, callback) {
+        // credentials should be provided in JSON post data, but later
+        let postData = {'id': boardId}
+        this._api_post(`/delete-board/${boardId}`, postData, (jsonResponse) => {
+            if (jsonResponse.id) {
+                let indexToDel = this._data["boards"].indexOf(jsonResponse)
+                this._data["boards"].splice(indexToDel, 1);
+            }
+            callback(jsonResponse)
+        })
+    },
+
     camelize: function (str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
         return index === 0 ? word.toLowerCase() : word.toUpperCase();
     }).replace(/\s+/g, '');
     },
-    deleteBoard: function (boardId, callback) {
-
-    },
+    
 };

@@ -47,6 +47,7 @@ def _write_csv(file_name, data_type, list_of_dict):
             else:
                 print('Wrong data type!')
                 return
+                
             writer = csv.DictWriter(csvfile, fieldnames=my_fieldnames)
             writer.writeheader()    # writes the first row of the .csv (the keys in my_fieldnames)
             writer.writerows(list_of_dict)
@@ -75,7 +76,7 @@ def _append_csv(file_name, data_type, row):
         # ordering of the dictionary keys [this order is given by the header (my_fieldnames)]
         values_list = [ row[field] if field in row else "" for field in my_fieldnames ]
 
-        writer = csv.writer(csvfile)
+        writer = csv.writer(csvfile, quotechar='"')
         writer.writerow(values_list)
 
 
@@ -91,7 +92,7 @@ def _get_data(data_type, file, force):
         _cache[data_type] = _read_csv(file)
     return _cache[data_type]
 
-    
+
 def get_data_from_csv(filename):
     with open(filename, newline='') as csv_file:
         csv_reader = csv.reader(csv_file)
@@ -164,6 +165,14 @@ def rename_board(id, new_name):
 
 def rename_column(old_name, new_name):
     _edit_status_csv(STATUSES_FILE, old_name, new_name)
+
+
+def write_boards(list_of_dict):
+    _write_csv(BOARDS_FILE, 'boards', list_of_dict)
+
+
+def write_cards(list_of_dict):
+    _write_csv(CARDS_FILE, 'cards', list_of_dict)
 
 # NOT YET
 # def rename_card(card_id, new_name):

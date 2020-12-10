@@ -67,7 +67,7 @@ def rename_board():
 
 
 @app.route("/rename-column", methods=["POST"])
-@json_response
+@status_response
 def rename_column():
 
     @construct_default_reply
@@ -107,6 +107,33 @@ def add_a_new_board():
     return basic_function(request_object=request)
 
 
+@app.route("/delete-board/<int:board_id>", methods=["POST"])
+@status_response
+def delete_a_board(board_id):
+
+    @construct_default_reply
+    def basic_function(request_object):
+        posted_data = request_object.json      
+        try:
+            posted_id = int(posted_data["id"])           
+        except (ValueError, TypeError, KeyError):
+            print("Failed in typecasting")
+            return None
+        else:
+            if posted_id == board_id:
+                try:                    
+                    return_dict = data_handler.pop_from_list_board(board_id, force=False)
+                except (TypeError, ValueError):
+                    print("Failed in not finding id")
+                    return None
+                else:
+                    return return_dict
+            else:
+                print("Failed in supplying proper JSON id")
+                return None
+
+    return basic_function(request_object=request)
+
 @app.route('/registration', methods=['POST'])
 @json_response
 def registration():
@@ -133,7 +160,7 @@ def login():
 
 
 @app.route("/update-card", methods=["POST"])
-@json_response
+@status_response
 def update_card():
 
     @construct_default_reply

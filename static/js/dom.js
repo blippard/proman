@@ -330,13 +330,13 @@ export let dom = {
     // and, thus, element and node are interchangeable for almost all purposes
     clickEvent.preventDefault();
     dataHandler.deleteBoard(boardNode.dataset.id, (jsonResponse) => {
-      if (!jsonResponse.success) {
+      if (!(jsonResponse.id)) {
         window.alert(
           "Could not get reply from server. Will delete only temporarily!"
         );
       }
     });
-    // window.alert(`Deleted board with id=${boardNode.dataset.idOfBoard}`)
+    // window.alert(`Deleted board with id=${boardNode.dataset.id}`)
     boardNode.remove(); // this will remove all children of the node as well
   },
   handleRenameBoardClick: function (boardBtnElement) {
