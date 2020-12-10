@@ -13,36 +13,22 @@ export let dataHandler = {
             method: 'GET',
             credentials: 'same-origin'
         })
-        .then(response => response.json())  // parse the response as JSON
-        .then(json_response => callback(json_response));  // Call the `callback` with the returned object
+            .then(response => response.json())  // parse the response as JSON
+            .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
     _api_post: function (url, data, callback) {
-    // it is not called from outside
-    // sends the data to the API, and calls callback function
-    fetch(url, {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    })
-      .then((response) => response.json()) // parse the response as JSON
-      .then((json_response) => callback(json_response)); // Call the `callback` with the returned object
-  },
-    _api_put: function (url, data, callback) {
+        // it is not called from outside
+        // sends the data to the API, and calls callback function
         fetch(url, {
-            method: 'PUT',
+            method: "POST",
             body: JSON.stringify(data),
-            headers: new Headers({
-                "content-type": "application/json"
-            })
-        }).then(function (response) {
-            if (response.status !== 200) {
-                console.log(`Looks like there was a problem. Status code: ${response.status}`);
-                return;
-            }
-        }).then(callback)
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        })
+            .then((response) => response.json()) // parse the response as JSON
+            .then((json_response) => callback(json_response)); // Call the `callback` with the returned object
     },
     init: function () {
     },
@@ -87,20 +73,20 @@ export let dataHandler = {
     },
     createNewBoard: function (boardTitle, callback) {
         // creates new board, makes a request to save it and calls the callback function with its data
-        let dataToPost = { title: boardTitle };
+        let dataToPost = {title: boardTitle};
         this._api_post("/add-board", dataToPost, (jsonResponse) => {
-          if (jsonResponse.title) {
-            this._data["boards"].push(jsonResponse);
-          }
-          callback(jsonResponse);
+            if (jsonResponse.title) {
+                this._data["boards"].push(jsonResponse);
+            }
+            callback(jsonResponse);
         }); //callback will act on response.json(),
         //                                                  // not on response
-      },
+    },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
-        let newCardPostData = {'title': cardTitle, 'board_id': boardId, 'status_id':statusId}
+        let newCardPostData = {'title': cardTitle, 'board_id': boardId, 'status_id': statusId}
         this._api_post('/add-card', newCardPostData, (jsonResponse) => {
-        this._data["cards"].push(jsonResponse);
+            this._data["cards"].push(jsonResponse);
         })
     },
     renameBoard: function (boardId, title, callback) {
@@ -124,8 +110,8 @@ export let dataHandler = {
     // },
     // here comes more features
     camelize: function (str) {
-    return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
-        return index === 0 ? word.toLowerCase() : word.toUpperCase();
-    }).replace(/\s+/g, '');
+        return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+            return index === 0 ? word.toLowerCase() : word.toUpperCase();
+        }).replace(/\s+/g, '');
     }
 };
