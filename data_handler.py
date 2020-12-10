@@ -48,3 +48,19 @@ def get_board_statuses(boardId):
                 if status['id'] in board_statuses:
                     matching_statuses.append(status)
     return matching_statuses
+
+
+def add_status_to_board(board_id, column_title_json):
+    column_title = column_title_json['columnTitle']
+    boards = persistence.get_boards()
+    if not persistence.check_if_status_exists(column_title):
+        status_id = str(int(persistence.get_highest_id('./data/statuses.csv')) + 1)
+        persistence.append_row({'id' : status_id,
+                                'title' : column_title},
+                               './data/statuses.csv')
+    else:
+        status_id = persistence.get_status_id(column_title)
+    for board in boards:
+        if int(board['id']) == int(board_id):
+            board['board_statuses'] += f',{status_id}'
+    persistence._write_csv('./data/boards.csv', 'boards', boards)
