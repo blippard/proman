@@ -36,7 +36,7 @@ export let dom = {
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
                         <button class="btn btn-dark add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
-                        <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
+                        <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
                     </div>
                     <div class="row collapse" id="board${board.id}">
                         ${columnlist}
