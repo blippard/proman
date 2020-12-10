@@ -30,6 +30,20 @@ export let dataHandler = {
       .then((response) => response.json()) // parse the response as JSON
       .then((json_response) => callback(json_response)); // Call the `callback` with the returned object
   },
+    _api_put: function (url, data, callback) {
+        fetch(url, {
+            method: 'PUT',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                "content-type": "application/json"
+            })
+        }).then(function (response) {
+            if (response.status !== 200) {
+                console.log(`Looks like there was a problem. Status code: ${response.status}`);
+                return;
+            }
+        }).then(callback)
+    },
     init: function () {
     },
     getBoards: function (callback) {
@@ -61,6 +75,13 @@ export let dataHandler = {
             callback(response);
         })
     },
+    getLatestCardsByBoardId: function (boardId, callback) {
+        // the cards are retrieved and then the callback function is called with the cards
+        this._api_get(`/get-cards/${boardId}`, (response) => {
+            this._data['cards'] = response;
+            callback(response[response.length - 1]);
+        })
+    },
     getCard: function (cardId, callback) {
         // the card is retrieved and then the callback function is called with the card
     },
@@ -82,6 +103,25 @@ export let dataHandler = {
         this._data["cards"].push(jsonResponse);
         })
     },
+    renameBoard: function (boardId, title, callback) {
+        let newNameBoard = {'board_id': boardId, 'title': title};
+        this._api_post('/rename-board', newNameBoard, (jsonResponse) => {
+            this._data["boards"].push(jsonResponse);
+        })
+    },
+    renameColumn: function (oldName, title, callback) {
+        let newNameColumn = {'old-name': oldName, 'title': title};
+        this._api_post('/rename-column', newNameColumn, (jsonResponse) => {
+            this._data["statuses"].push(jsonResponse);
+        })
+    },
+    // NOT YET
+    // renameCard: function (cardId, title, callback) {
+    //     let newNameColumn = {'card-id': cardId, 'title': title};
+    //     this._api_post('/rename-column', newNameCard, (jsonResponse) => {
+    //         this._data["statuses"].push(jsonResponse);
+    //     })
+    // },
     // here comes more features
     camelize: function (str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {

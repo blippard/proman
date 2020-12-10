@@ -1,30 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>ProMan</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ProMan Christmas</title>
 
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon/favicon.ico') }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon/favicon-32x32.png') }}">
-        <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='favicon/favicon-96x96.png') }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon/favicon-16x16.png') }}">
+    <link href="data:image/x-icon;base64,AAABAAEAEBAAAAEACABoBQAAFgAAACgAAAAQAAAAIAAAAAEACAAAAAAAAAEAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAADLAPry8gABAacA/Pb3AP/9/QAAAPMAqajiAPXs6QABAK8AAAKkAP///wD9+PkAAAH+APDPzAAAAN4AAAHwAPrz9QD9//4A+O/vAOvSywD58/QAAACmAPPj3gABAMEA487LAAEAmAD+/PwA+e7pAPvz8wAAAOkAAQLDAPbq6gD89/gAAACeAAIA4gABAJ4A/vz7AAAA1AAAALIAAADoAP75+gDp080A9u7uAKqu8wD47u4AAAC4AAsHjwAAANMA+PDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALEhQpIQQVAjEtHAAAAAAADgUlKSEEFQIxKwggAAAAAAAFJSkhBB0CMSsIICoAAAAAABAoDyYBGC4JJwAAAAAAAA0GKA8mARguCRYAAAAAAAAHBigPJgEYLgkvAAAAAAAAAAYoDyYBGC4JAAAAFyEZAAAfKA8mARguCQoAABsLDAAAAB4PJgEYLgkDJBoRGxMAAAAAIyYBGC4JAyIaAAAAAAAAAAAAMBguCQMsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//AAD//wAAAB8AAAAPAACABwAAwB8AAIAfAACAHwAAwDgAAMAYAADgAAAA8AcAAPwPAAD//wAA//8AAP//AAA="
+          rel="icon" type="image/x-icon"/>
 
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous" defer></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous" defer></script>
-    </head>
-    <body>
-        <h1>ProMan</h1>
-        <div class="top-btn-container">
-            <button type="button" class="add-board-btn">Add Board <strong>+</strong></button>
-        </div>
-        <div class="panel" id="boards">Boards are loading...</div>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
+    <script type="module" src="{{ url_for('static', filename='js/design.js') }}" defer></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/stylesheet/main.css') }}">
 
-    
-    </body>
+</head>
+<body>
+<canvas id="snow"></canvas>
+
+<div class="center" id="contents">
+    <div class="text-center">
+        <img id="santa4" class="santas" src="/static/css/images/santa4.gif" alt="santa4">
+        <img id="santa3" class="santas" src="/static/css/images/santa3.gif" alt="santa3">
+        <p><span style="font-size: 43px">    ProMan</span>
+            <img id="audio" style="height: 20px; width:20px;" src="/static/css/images/audio.png" alt="audio">
+            <br><span style="font-size: 28px">Christmas Edition</span>
+            <br><span class="team" style="font-size: 13px">by 40 dkg greenpeas</span></p>
+        <img id="santa1" class="santas" src="/static/css/images/santa1.gif" alt="santa1">
+        <img id="santa2" class="santas" src="/static/css/images/santa2.gif" alt="santa2">
+        <br>
+        <button id="login-button" class="mc-button log-button">
+            Login
+        </button>
+        <button id="registration-button" class="mc-button log-button">
+            Register
+        </button>
+        <button class="mc-button log-button">
+            Logout
+        </button>
+        <button class="add-board-btn mc-button log-button">
+            Add Board
+        </button>
+    </div>
+
+    <br>
+    <div class="panel" id="boards"></div>
+
+    <div id="registration-container">
+        <form class="registration">
+            <h2>Registration</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username">
+            <label for="password">Password:</label>
+            <input type="password" id="password">
+            <label for="password">Confirm password:</label>
+            <input type="password" id="confirm_password">
+            <input id="reg-button" type="button" value="Register">
+        </form>
+    </div>
+    <div id="login-container">
+        <form class="login">
+            <h2>Login</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="login-username">
+            <label for="password">Password:</label>
+            <input type="password" id="login-password">
+            <input id="login-submit-button" type="button" value="Login">
+        </form>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+</body>
 </html>

@@ -1,25 +1,27 @@
+/*
 #boards {
     background-color: green;    
 }
-
+*/
 .board-container {
     display: flex;
     flex-direction: column;
 }
 
-.board {
+/* .board {
     background-color: limegreen;
-    min-height: 12rem;  /* rem = relative em-dashes (makes em-dashes big for readability) */
+    min-height: 12rem;  
     height: max-content;
     margin: 0.5rem;
-}
+} */
 
 .board-header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background-color: #0ea50e;
+    /* background-color: #0ea50e; */
 }
+
 
 .new-card-btn {
     font-size: 10px;
@@ -29,13 +31,13 @@
     color: white;
 }
 
-.remove-board-btn {
+/* .remove-board-btn {
     font-size: 10px;
     font-family: KacstFarsi;
     border-radius: 25%;
     background-color: darkolivegreen;
     color: red;
-}
+} */
 
 .top-btn-container {
     display: flex;
@@ -43,6 +45,87 @@
     margin: 0.5rem;
 }
 
+/*
 .add-board-btn {
     background-color: turquoise;
+*/
+.new {
+    width: inherit;
+    background-color: red;
+}
+
+.inProgress {
+    width: inherit;
+    background-color: orange;
+}
+
+.testing {
+    width: inherit;
+    background-color: lightblue;
+}
+
+.done {
+    width: inherit;
+    background-color: limegreen;
+}
+
+#password {
+    margin-bottom: 10px;
+}
+
+#login-password {
+    margin-bottom: 10px;
+}
+
+#confirm_password {
+    margin-bottom: 20px;
+}
+
+#username {
+    margin-bottom: 10px;
+}
+
+#login-username {
+    margin-bottom: 10px;
+}
+
+html {
+    height: 100%;
+}
+
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+h2 {
+    margin: unset;
+    margin-bottom: 10px;
+}
+
+.registration {
+    background-color: #525900;
+    padding: 40px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    display: flex;
+}
+
+.login {
+    background-color: #525900;
+    padding: 40px;
+    flex-direction: column;
+    justify-content: space-evenly;
+    display: flex;
+}
+
+#registration-container {
+    display: none;
+}
+
+#login-container {
+    display: none;
 }

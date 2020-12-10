@@ -46,11 +46,49 @@ def add_a_new_card():
     @construct_default_reply
     def basic_function(request_object):    
         posted_data = request_object.json        
-        if "title" in posted_data:
-            data_handler.create_new_card(posted_data)
+        if "title" in posted_data:            
+            return data_handler.create_new_card(posted_data)
+
+    return basic_function(request_object=request)
+
+
+@app.route("/rename-board", methods=["POST"])
+@status_response
+def rename_board():
+
+    @construct_default_reply
+    def basic_function(request_object):
+        posted_data = request_object.json        
+        if "title" in posted_data:  
+            data_handler.rename_board(posted_data)
             return {}
 
     return basic_function(request_object=request)
+
+
+@app.route("/rename-column", methods=["POST"])
+@json_response
+def rename_column():
+
+    @construct_default_reply
+    def basic_function(request_object):
+        posted_data = request_object.json        
+        if "title" in posted_data: 
+            data_handler.rename_column(posted_data)
+            return {}
+
+    return basic_function(request_object=request)
+
+
+# NOT YET
+# @app.route("/rename-card", methods=["POST"])
+# @json_response
+# def rename_card():
+#     posted_data = request.json
+#     if "title" in posted_data:
+#         data_handler.rename_card(posted_data)
+#     else:
+#         return "Mangled data", 400
 
 
 @app.route("/add-board", methods=["POST"])
@@ -67,6 +105,31 @@ def add_a_new_board():
             return data_handler.createback_new_board(posted_data["title"])
 
     return basic_function(request_object=request)
+
+
+@app.route('/registration', methods=['POST'])
+@json_response
+def registration():
+    new_user = request.json['username']
+    plain_text_password = request.json['password']
+    confirm_password = request.json['confirmPassword']
+    if plain_text_password == confirm_password:
+        if data_handler.get_user(new_user):
+            return 'Failure'
+        data_handler.add_user(new_user, plain_text_password)
+        return 'Success'
+
+
+@app.route('/login', methods=['POST'])
+@json_response
+def login():    
+    username = request.json['username']
+    password = request.json['password']
+    user = data_handler.get_user_for_login(username, password)
+    if user:
+        return user[0]
+    else:
+        return 'Failure'
 
 
 def main():

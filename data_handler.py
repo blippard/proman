@@ -1,4 +1,6 @@
 import persistence
+import csv
+import bcrypt
 
 
 def get_card_status(status_id):
@@ -90,3 +92,72 @@ def createback_new_board(title):
     row_dict = {'id': str(get_new_id_for_boards()), 'title': title, 'board_statuses': '0,1,2,3'}
     persistence.append_boards(row_dict)
     return row_dict
+
+
+def rename_board(board_data):
+    id = board_data['board_id']
+    new_title = board_data['title']
+    persistence.rename_board(id, new_title)
+    return row_dict
+
+
+def rename_column(column_data):
+    old_name = column_data['old-name']
+    new_title = column_data['title']
+    persistence.rename_column(old_name, new_title)
+    return row_dict
+
+
+# # NOT YET
+# def rename_card(card_data):
+#     card_id = card_data['card-id']
+#     new_title = card_data['title']
+#     persistence.rename_card(card_id, new_title)
+#     return row_dict
+
+
+def get_user(username):
+    with open('./data/user.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            if row[0] != 'id':
+                if username == row[1]:
+                    return row
+
+
+def get_user_list():
+    with open('./data/user.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        return list(csv_reader)
+
+
+def generate_id():
+    user_list = get_user_list()
+    id = str(int(user_list[-1][0]) + 1)
+    return id
+
+
+def add_user(username, password):
+    id = generate_id()
+    with open('./data/user.csv', mode='a') as csv_file:
+        csv_writer = csv.writer(csv_file, delimiter=',')
+        csv_writer.writerow([id, username, hash_password(password)])
+
+
+def hash_password(plain_text_password: str):
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password: str, hashed_password: str):
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+
+def get_user_for_login(username, password):
+    with open('./data/user.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            if row[0] != 'id':
+                if username == row[1]:
+                    if verify_password(password, row[2]):
+                        return row

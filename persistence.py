@@ -91,6 +91,47 @@ def _get_data(data_type, file, force):
         _cache[data_type] = _read_csv(file)
     return _cache[data_type]
 
+    
+def get_data_from_csv(filename):
+    with open(filename, newline='') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        csv_list = list(csv_reader)
+        csv_file.close()
+    return csv_list
+
+
+def _edit_csv(file_name, id, new_name):
+    csv_list = get_data_from_csv(file_name)
+    for row in csv_list:
+        if row[0] == id:
+            row[1] = new_name
+    with open(file_name, 'w', newline='') as writer:
+        data = csv.writer(writer, delimiter=',')
+        for row in csv_list:
+            data.writerow(row)
+
+
+def _edit_status_csv(file_name, old_name, new_name):
+    csv_list = get_data_from_csv(file_name)
+    for row in csv_list:
+        if row[1] == old_name:
+            row[1] = new_name
+    with open(file_name, 'w', newline='') as writer:
+        data = csv.writer(writer, delimiter=',')
+        for row in csv_list:
+            data.writerow(row)
+
+
+def _edit_card_csv(file_name, card_id, new_name):
+    csv_list = get_data_from_csv(file_name)
+    for row in csv_list:
+        if row[0] == card_id:
+            row[2] = new_name
+    with open(file_name, 'w', newline='') as writer:
+        data = csv.writer(writer, delimiter=',')
+        for row in csv_list:
+            data.writerow(row)
+
 
 def clear_cache():
     for k in list(_cache.keys()):
@@ -115,3 +156,15 @@ def append_cards(board_dict):
 
 def append_boards(board_dict):
     _append_csv(BOARDS_FILE, 'boards', board_dict)
+
+
+def rename_board(id, new_name):
+    _edit_csv(BOARDS_FILE, id, new_name)
+
+
+def rename_column(old_name, new_name):
+    _edit_status_csv(STATUSES_FILE, old_name, new_name)
+
+# NOT YET
+# def rename_card(card_id, new_name):
+#     _edit_card_csv(CARDS_FILE, card_id, new_name)
