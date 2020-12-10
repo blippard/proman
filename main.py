@@ -44,7 +44,7 @@ def get_status(board_id: int):
 def add_a_new_card():
     posted_data = request.json
     if "title" in posted_data:
-        data_handler.create_new_card(posted_data)
+        return data_handler.create_new_card(posted_data)
     else:
         return "Mangled data", 400
 
