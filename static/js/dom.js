@@ -58,6 +58,7 @@ export let dom = {
             })
         })
         // This function should run once, when the page is loaded.
+        this.initModalSubmit();
         const newBoardBtn = document.querySelector(".add-board-btn");
         newBoardBtn.addEventListener("click", (event) => {
             this.handleAddBoardClick(event);
@@ -76,7 +77,8 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function (boards) {
+        this.removeAllBoardElements();
+        dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
             for (let board of boards) {
                 dom.loadCards(board.id);
@@ -89,26 +91,35 @@ export let dom = {
 
     let boardList = "";
 
-        for (let board of boards) {
+        for(let board of boards){
+            let columnlist = '';
+            for (let column of board.board_statuses){
+                columnlist += `
+                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}">
+                    <div class="card-column-title text-center border-bottom border-dark mb-2">${column}</div>
+                </div>
+                `
+            }
             boardList += `
-                <section class="board col mb-5 border border-dark" data-id=${board.id}>
+                <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
                     <div class="board-header">
-                        <span class="board-title">${board.title}</span>                        
+                        <span class="board-title">${board.title}</span>
+                        <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
+                        <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                            &#x2304
+                        </button>
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
                         <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">
                           Rename Board
                         </button>
-                        <button class="remove-board-btn">Delete Board &#x1F5D1</button>
-                        <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
-                          &#x2304
-                        </button>
-                        
+                        <button class="remove-board-btn">Delete Board &#x1F5D1</button>                       
                     </div>
                     <div class="row collapse" id="board${board.id}">
-                        
+                        ${columnlist}
                     </div>
                 </section>
             `;
+
         }
 
         const outerHtml = `
@@ -119,6 +130,10 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        let addColumnButtons = document.querySelectorAll('.add-column');
+        for (let button of addColumnButtons) {
+            button.addEventListener('click', (event) => this.initAddColumn(event));
+        }
 
         this.addCardEventListener();
         document.querySelectorAll(".remove-board-btn").forEach((item) => {
@@ -128,7 +143,8 @@ export let dom = {
           });
         });
         this.newNameBoardEventListener();
-        },
+        this.initColumnTitleRename();
+    },
     addCardEventListener: function ()  {
         let newCardBtns = document.querySelectorAll('.new-card-btn');
 
@@ -137,34 +153,33 @@ export let dom = {
             cardBtn.addEventListener('click', function () {
                 // let cardTitle = prompt("Please add a title");
                 let cardForm = `
-                <form>
-                <input type="text" name="title">
-                <select name="status">
-                    <option value="0">New</option>
-                    <option value="1">In Progress</option>
-                    <option value="2">Testing</option>
-                    <option value="3">Done</option>
-                </select>
-                <input type="submit" id="new-card-submit" value="Save">
-                </form>
-                `
+                    <form>
+                    <input type="text" name="title">
+                    <select name="status">
+                        <option value="0">New</option>
+                        <option value="1">In Progress</option>
+                        <option value="2">Testing</option>
+                        <option value="3">Done</option>
+                    </select>
+                    <input type="submit" id="new-card-submit" value="Save">
+                    </form>
+                    `
                 cardBtn.insertAdjacentHTML("afterend", cardForm);
 
                 let form = document.querySelector('form')
-                    form.addEventListener('submit', event => {
-                        event.preventDefault();
-                        const formData = new FormData(event.target)
-                        const formSheet = document.querySelector('form');
-                        dataHandler.createNewCard(formData.get('title'), boardId, formData.get('status'));
-                        formSheet.remove();
-                        dom.loadLatestCards(boardId);
-                    })
+                form.addEventListener('submit', event => {
+                    event.preventDefault();
+                    const formData = new FormData(event.target)
+                    const formSheet = document.querySelector('form');
+                    dataHandler.createNewCard(formData.get('title'), boardId, formData.get('status'));
+                    formSheet.remove();
+                    dom.loadLatestCards(boardId);
+                })
             })
         }
-
     },
 
-        newNameBoardEventListener: function ()  {
+    newNameBoardEventListener: function () {
         let renameBoardBtn = document.querySelectorAll('.rename-board-btn');
         for (let boardBtn of renameBoardBtn) {
             let boardId = boardBtn.getAttribute('board-id');
@@ -178,88 +193,36 @@ export let dom = {
                 `
                 boardBtn.insertAdjacentHTML("afterend", cardForm);
                 let form = document.querySelector('form')
-                    form.addEventListener('submit', event => {
-                        const formData = new FormData(event.target)
-                        dataHandler.renameBoard(boardId, formData.get('title'));
-                    })
+                form.addEventListener('submit', event => {
+                    const formData = new FormData(event.target)
+                    dataHandler.renameBoard(boardId, formData.get('title'));
+                })
             })
         }
     },
 
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getCardsByBoardId(boardId,function(cards){
+        dataHandler.getCardsByBoardId(boardId, function (cards) {
             dom.showCards(cards);
         })
     },
     loadLatestCards: function (boardId) {
         // retrieves cards and makes showCards called
-        dataHandler.getLatestCardsByBoardId(boardId,function(cards){
+        dataHandler.getLatestCardsByBoardId(boardId, function (cards) {
             dom.showCard(cards);
         })
-    },
-    showCard: function (card) {
-        // shows the cards of a board
-        // it adds necessary event listeners also
-            let board = document.querySelector(`#board${card.board_id}`);
-            if (`board${card.board_id}` == `${board.id}`) {
-                if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
-                    let createCardColumn = document.createElement('div');
-                    let createColumnTitle = document.createElement('div');
-                    createCardColumn.setAttribute('class', `col border border-dark p-0 ${dataHandler.camelize(card.status_id)}${card.board_id}`);
-                    createCardColumn.setAttribute('status', `${dataHandler.camelize(card.status_id)}`)
-                    createColumnTitle.setAttribute('class', 'card-column-title text-center border-bottom border-dark mb-2');
-                    createColumnTitle.innerText = `${card.status_id}`;
-                    createCardColumn.appendChild(createColumnTitle);
-                    board.appendChild(createCardColumn);
-                }
-                let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
-                let cardToAdd = `
-                    <div id="${card.id}" draggable="true" class="${dataHandler.camelize(card.status_id)}" card="true">
-                        ${card.title}
-                    </div>
-                `;
-                cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
-            }
-
-        this.createDropZone();
     },
 
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
-        for (let card of cards){
+        for (let card of cards) {
             let board = document.querySelector(`#board${card.board_id}`);
             if (`board${card.board_id}` == `${board.id}`) {
-                if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
-                    let createCardColumn = document.createElement('div');
-                    let createColumnTitle = document.createElement('div');
-                    createCardColumn.setAttribute('class', `col border border-dark p-0 ${dataHandler.camelize(card.status_id)}${card.board_id}`);
-                    createCardColumn.setAttribute('status', `${dataHandler.camelize(card.status_id)}`)
-                    createColumnTitle.setAttribute('class', 'card-column-title text-center border-bottom border-dark mb-2');
-                    createColumnTitle.innerText = `${card.status_id}`;
-                    createCardColumn.appendChild(createColumnTitle);
-                    board.appendChild(createCardColumn);
-                    createColumnTitle.addEventListener("click", function () {
-                        let oldName = `${card.status_id}`;
-                        let columnTitle = `${card.status_id}`;
-                        let addName = `
-                            <form>
-                            <input type="text" name="title" placeholder="${columnTitle}" value="${columnTitle}">
-                            <input type="submit" id="new-board-name-submit" value="Save">
-                            </form>
-                            `
-                        createColumnTitle.insertAdjacentHTML("afterend", addName);
-                        let form = document.querySelector('form')
-                        form.addEventListener('submit', event => {
-                            const formData = new FormData(event.target)
-                            dataHandler.renameColumn(oldName, formData.get('title'));
-                        })
-                    });
-                }
                 let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
                 let cardToAdd = `
-                    <div id="${card.id}" draggable="true" class="${dataHandler.camelize(card.status_id)}" card="true">
+                    <div id="${card.id}" draggable="true" class="card mx-0 mb-2 border border-dark text-center ${dataHandler.camelize(card.status_id)}" card="true">
                         ${card.title}
                     </div>
                 `;
@@ -284,90 +247,161 @@ export let dom = {
         });
       }
     },
-  createNewChildBoard: function (board) {
-    const boardInnerContainer = document.querySelector(".board-container");
-    let childHTMLText = `
-            <section class="board col mb-5 border border-dark" data-id="${board.id}">
-              <div class="board-header">
-                  <span class="board-title">${board.title}</span>                        
-                  <button class="new-card-btn" board-id="${board.id}">New Card</button>
-                  <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">
-                    Rename Board
-                  </button>
-                  <button class="remove-board-btn">Delete Board &#x1F5D1</button>
-                  <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
-                    &#x2304
-                  </button>
-                  
-              </div>
-              <div class="row collapse" id="board${board.id}">
-                  
-              </div>
+    createNewChildBoard: function (board) {
+        const boardInnerContainer = document.querySelector(".board-container");
+        let columnlist = '';
+            for (let column of board.board_statuses){
+                columnlist += `
+                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}">
+                    <div class="card-column-title text-center border-bottom border-dark mb-2">${column}</div>
+                </div>
+                `
+            }
+        let childHTMLText = `
+            <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
+                <div class="board-header">
+                    <span class="board-title">${board.title}</span>
+                    <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
+                    <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                        &#x2304
+                    </button>
+                    <button class="new-card-btn" board-id="${board.id}">New Card</button>
+                    <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">
+                        Rename Board
+                    </button>
+                    <button class="remove-board-btn">Delete Board &#x1F5D1</button>
+
+                </div>
+                <div class="row collapse" id="board${board.id}">
+                    ${columnlist}
+                </div>
             </section>
-            `;
-    boardInnerContainer.insertAdjacentHTML("beforeend", childHTMLText);
-    let newRenameBoardBtn = boardInnerContainer.lastElementChild.querySelector(
-      ".rename-board-btn"
-    );
-    newRenameBoardBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      this.handleRenameBoardClick(newRenameBoardBtn);
-    });
-
-    let newRemoveBoardBtn = boardInnerContainer.lastElementChild.querySelector(
-      ".remove-board-btn"
-    );   
-    newRemoveBoardBtn.addEventListener("click", (event) => {
-      this.handleRemoveBoardClick(
-        newRemoveBoardBtn.parentNode.parentNode,
-        event
-      );
-    });
-
-  },
-  handleRemoveBoardClick: function (boardNode, clickEvent) {
-    // boardNode is the node in the DOM tree corresponding to a board HTML element
-    // and, thus, element and node are interchangeable for almost all purposes
-    clickEvent.preventDefault();
-    dataHandler.deleteBoard(boardNode.dataset.id, (jsonResponse) => {
-      if (!(jsonResponse.id)) {
-        window.alert(
-          "Could not get reply from server. Will delete only temporarily!"
+                `;
+        boardInnerContainer.insertAdjacentHTML("beforeend", childHTMLText);
+        let newRenameBoardBtn = boardInnerContainer.lastElementChild.querySelector(
+            ".rename-board-btn"
         );
-      }
-    });
-    // window.alert(`Deleted board with id=${boardNode.dataset.id}`)
-    boardNode.remove(); // this will remove all children of the node as well
-  },
-  handleRenameBoardClick: function (boardBtnElement) {
-    let boardTitle = boardBtnElement.parentNode.querySelector(".board-title").innerText;
-    let boardId = boardBtnElement.parentNode.parentNode.dataset.id;
-    let cardForm = `
-      <form>
-        <input type="text" name="title" placeholder="${boardTitle}" value="${boardTitle}">
-        <input type="submit" id="new-board-name-submit" value="Save">
-      </form>
-      `
-    boardBtnElement.insertAdjacentHTML("afterend", cardForm);
-    let form = document.querySelector('form')
-        form.addEventListener('submit', event => {
-            const formData = new FormData(event.target)
-            dataHandler.renameBoard(boardId, formData.get('title'));
+        newRenameBoardBtn.addEventListener("click", (event) => {
+            event.preventDefault();
+            this.handleRenameBoardClick(newRenameBoardBtn);
+        });
+
+        let newRemoveBoardBtn = boardInnerContainer.lastElementChild.querySelector(
+            ".remove-board-btn"
+        );   
+        newRemoveBoardBtn.addEventListener("click", (event) => {
+            this.handleRemoveBoardClick(
+                newRemoveBoardBtn.parentNode.parentNode,
+                event
+            );
+        });
+
+    },
+    handleRemoveBoardClick: function (boardNode, clickEvent) {
+        // boardNode is the node in the DOM tree corresponding to a board HTML element
+        // and, thus, element and node are interchangeable for almost all purposes
+        clickEvent.preventDefault();
+        let boardId = parseInt(boardNode.id.substring(9)) // remove the first 10 chars of id=
+        dataHandler.deleteBoard(boardId, (jsonResponse) => {
+        if (!(jsonResponse.id)) {
+            window.alert(
+            "Could not get reply from server. Will delete only temporarily!"
+            );
+        }
+        });
+        // window.alert(`Deleted board with id=${boardNode.dataset.id}`)
+        boardNode.remove(); // this will remove all children of the node as well
+    },
+    handleRenameBoardClick: function (boardBtnElement) {
+        let boardTitle = boardBtnElement.parentNode.querySelector(".board-title").innerText;
+        let boardId = boardBtnElement.parentNode.parentNode.dataset.id;
+        let cardForm = `
+        <form>
+            <input type="text" name="title" placeholder="${boardTitle}" value="${boardTitle}">
+            <input type="submit" id="new-board-name-submit" value="Save">
+        </form>
+        `
+        boardBtnElement.insertAdjacentHTML("afterend", cardForm);
+        let form = document.querySelector('form')
+            form.addEventListener('submit', event => {
+                const formData = new FormData(event.target)
+                dataHandler.renameBoard(boardId, formData.get('title'));
+            })
+    },
+    createDropZone: function () {
+        let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
+        let cards = document.querySelectorAll('div[card="true"]');
+            for (let card of cards) {
+                card.addEventListener('dragstart', event => {
+                    event.dataTransfer.setData("text/plain", card.id);
+                });
+            };
+            dom.setUpDropZone(dropZone);
+
+    },
+    
+    // here comes more features
+    removeAllBoardElements: function () {
+        let allBoards = document.querySelector('#boards');
+        if (allBoards) {
+            allBoards.innerHTML = '';
+        }
+    },
+    initAddColumn: function (event) {
+        let boardSection = event.target.parentNode.parentNode;
+        if (boardSection.tagName === 'SECTION' && boardSection.classList.contains('board')) {
+            document.querySelector('#submitModalTitle').innerText = 'Add new column';
+            document.querySelector('#submitModalInputPrepend').innerText = 'Column name:';
+            document.querySelector('#submitModalInput').value = '';
+            let submitModal = document.querySelector('#submitModal');
+            submitModal.dataset.boardId = event.target.dataset.boardId;
+            submitModal.dataset.submitAction = event.target.dataset.submitAction;
+        }
+    },
+    initModalSubmit: function () {
+        document.querySelector('#modalSubmitButton').addEventListener('click', () => {
+            let submitModal = document.querySelector('#submitModal')
+            if (submitModal.querySelector('#submitModalInput').value) {
+                if (submitModal.dataset.submitAction === "addColumn") {
+                    let boardId = submitModal.dataset.boardId;
+                    let columnTitle = submitModal.querySelector('#submitModalInput').value;
+                    dataHandler.createNewColumn(columnTitle, boardId, (data) => {
+                        this.addNewColumn(boardId, data.columnTitle);
+                    });
+                }
+            }
         })
-  },
-  createDropZone: function () {
-      let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
-      let cards = document.querySelectorAll('div[card="true"]');
-
-      for (let card of cards) {
-          card.addEventListener('dragstart', event => {
-              event.dataTransfer.setData("text/plain", card.id);
-          });
-      };
-      dom.setUpDropZone(dropZone);
-
-  },
-  // here comes more features
+    },
+    addNewColumn: function (boardId, columnTitle) {
+        let board = document.querySelector(`#board${boardId}`);
+        let newColumn = `
+        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}">
+            <div class="'card-column-title text-center border-bottom border-dark mb-2'">${columnTitle}</div>
+        </div>
+        `
+        board.insertAdjacentHTML('beforeend', newColumn);
+    },
+    initColumnTitleRename: function () {
+        let columnTitles = document.querySelectorAll('.card-column-title');
+            for (let colTitle of columnTitles) {
+                colTitle.addEventListener("click", function () {
+                    let oldName = `${colTitle.innerText}`;
+                    let columnTitle = `${colTitle.innerText}`;
+                    let addName = `
+                        <form>
+                        <input type="text" name="title" placeholder="${columnTitle}" value="${columnTitle}">
+                        <input type="submit" id="new-board-name-submit" value="Save">
+                        </form>
+                        `
+                    colTitle.insertAdjacentHTML("afterend", addName);
+                    let form = document.querySelector('form')
+                    form.addEventListener('submit', event => {
+                        const formData = new FormData(event.target)
+                        dataHandler.renameColumn(oldName, formData.get('title'));
+                    })
+                });
+            }
+    },
   setUpDropZone: function (dropZone) {
           for (let zone of dropZone) {
               zone.addEventListener('dragover', event => {
@@ -412,6 +446,5 @@ export let dom = {
                     }
               });
           }
-
       },
 };

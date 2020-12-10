@@ -39,6 +39,12 @@ def get_status(board_id: int):
     return data_handler.get_board_statuses(board_id)
 
 
+@app.route("/add-column/<int:board_id>", methods=['POST'])
+@json_response
+def add_column(board_id: int):
+    data_handler.add_status_to_board(board_id, request.get_json())
+
+
 @app.route("/add-card", methods=["POST"])
 @status_response
 def add_a_new_card():
@@ -168,8 +174,11 @@ def update_card():
         posted_data = request_object.json
         if "id" in posted_data:
             data_handler.update_cards(posted_data)
+            return {}
+
     
     return basic_function(request_object=request)
+
 
 def main():
     app.run(debug=True)

@@ -3,7 +3,6 @@ import csv
 STATUSES_FILE = './data/statuses.csv'
 BOARDS_FILE = './data/boards.csv'
 CARDS_FILE = './data/cards.csv'
-
 STATUSES_HEADER = ['id', 'title']
 BOARDS_HEADER = ['id', 'title', 'board_statuses']
 CARDS_HEADER = ['id', 'board_id', 'title', 'status_id', 'order']
@@ -51,6 +50,49 @@ def _write_csv(file_name, data_type, list_of_dict):
             writer = csv.DictWriter(csvfile, fieldnames=my_fieldnames)
             writer.writeheader()    # writes the first row of the .csv (the keys in my_fieldnames)
             writer.writerows(list_of_dict)
+
+
+def get_highest_id(file_name):
+    highest_id = 0
+    all_rows = _read_csv(file_name)
+    for row in all_rows:
+        highest_id = int(row['id']) if int(row['id']) > highest_id else highest_id
+    return str(highest_id)
+
+
+def check_if_status_exists(title):
+    all_rows = _read_csv(STATUSES_FILE)
+    for row in all_rows:
+        if row['title'] == title:
+            return True
+    return False
+
+
+def get_status_id(title):
+    all_rows = _read_csv(STATUSES_FILE)
+    for row in all_rows:
+        if row['title'] == title:
+            return row['id']
+
+
+def append_row(data: dict, file_name):
+    new_row = []
+    if file_name == './data/boards.csv':
+        headers = BOARDS_HEADER
+    elif file_name == './data/cards.csv':
+        headers = CARDS_HEADER
+    elif file_name == './data/statuses.csv':
+        headers = STATUSES_HEADER
+    else:
+        return
+    for header in headers:
+        for key in data:
+            if key == header:
+                new_row.append(data[key])
+                continue
+    with open(file_name, 'a+') as file:
+        csv_writer = csv.writer(file)
+        csv_writer.writerow(new_row)
 
 
 def _append_csv(file_name, data_type, row):

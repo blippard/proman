@@ -9,7 +9,7 @@ def get_card_status(status_id):
     :param status_id:
     :return: str
     """
-    statuses = persistence.get_statuses()
+    statuses = persistence.get_statuses(True)
     return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
 
 
@@ -98,15 +98,13 @@ def createback_new_board(title):
 def rename_board(board_data):
     id = board_data['board_id']
     new_title = board_data['title']
-    persistence.rename_board(id, new_title)
-    return row_dict
+    persistence.rename_board(id, new_title)    
 
 
 def rename_column(column_data):
     old_name = column_data['old-name']
     new_title = column_data['title']
-    persistence.rename_column(old_name, new_title)
-    return row_dict
+    persistence.rename_column(old_name, new_title)    
 
 
 # # NOT YET
@@ -202,5 +200,17 @@ def remove_all_cards_of_board(board_id):
     persistence.write_cards(new_cards)
             
 
-# if __name__ == '__main__':
-#     pass
+def add_status_to_board(board_id, column_title_json):
+    column_title = column_title_json['columnTitle']
+    boards = persistence.get_boards()
+    if not persistence.check_if_status_exists(column_title):
+        status_id = str(int(persistence.get_highest_id('./data/statuses.csv')) + 1)
+        persistence.append_row({'id' : status_id,
+                                'title' : column_title},
+                               './data/statuses.csv')
+    else:
+        status_id = persistence.get_status_id(column_title)
+    for board in boards:
+        if int(board['id']) == int(board_id):
+            board['board_statuses'] += f',{status_id}'
+    persistence._write_csv('./data/boards.csv', 'boards', boards)
