@@ -88,3 +88,9 @@ def append_cards(board_dict):
 
 def append_boards(board_dict):
     _append_csv(BOARDS_FILE, 'boards', board_dict)
+
+
+def overwrite_csv(file_path, new_data):
+    with open(file_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(new_data)
