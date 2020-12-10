@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, redirect
 from util import json_response
 
 import data_handler
@@ -44,7 +44,7 @@ def get_status(board_id: int):
 def add_a_new_card():
     posted_data = request.json
     if "title" in posted_data:
-        data_handler.create_new_card(posted_data)
+        return data_handler.create_new_card(posted_data)
     else:
         return "Mangled data", 400
 
