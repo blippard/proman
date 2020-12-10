@@ -27,8 +27,7 @@ export let dataHandler = {
                 Accept: "application/json",
             },
         })
-            .then((response) => response.json()) // parse the response as JSON
-            .then((json_response) => callback(json_response)); // Call the `callback` with the returned object
+            .then(callback(datayy));
     },
     init: function () {
     },
