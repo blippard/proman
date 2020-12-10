@@ -37,7 +37,6 @@ export let dom = {
         // This function should run once, when the page is loaded.
     },
     postdata: async function (url = '', data) {
-        console.log(data)
         const response = await fetch(url,{
                 method: 'POST',
                 headers: {

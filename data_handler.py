@@ -1,5 +1,6 @@
 import persistence
 import csv
+import bcrypt
 
 
 def get_card_status(status_id):
@@ -56,6 +57,9 @@ def add_user(username, password):
     id = generate_id()
     with open('./data/user.csv', mode='a') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',')
-        csv_writer.writerow([id, username, password])
+        csv_writer.writerow([id, username, hash_password(password)])
 
 
+def hash_password(plain_text_password: str):
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')

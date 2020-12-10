@@ -37,7 +37,6 @@ def get_cards_for_board(board_id: int):
 @json_response
 def registration():
     if request.method == 'POST':
-        print(request.json)
         new_user = request.json['username']
         plain_text_password = request.json['password']
         confirm_password = request.json['confirmPassword']
