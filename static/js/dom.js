@@ -30,8 +30,9 @@ export let dom = {
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>                        
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
-                        <button class="remove-board-btn">Delete Board 🗑️</button>
+                        <button class="remove-board-btn">Delete Board &#x1F5D1</button>
                         <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                          &#x2304
                         </button>
                     </div>
                     <div class="row collapse" id="board${board.id}">
@@ -142,8 +143,9 @@ export let dom = {
                 <div class="board-header">
                     <span class="board-title">${board.title}</span>                    
                     <button class="new-card-btn" board-id="${board.id}">New Card</button>
-                    <button class="remove-board-btn">Delete Board 🗑️</button>
+                    <button class="remove-board-btn">Delete Board &#x1F5D1</button>
                     <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                      &#x2304
                     </button>
                 </div>
                 <div class="row collapse" id="board${board.id}">
