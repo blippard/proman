@@ -91,7 +91,7 @@ export let dom = {
 
         for (let board of boards) {
             boardList += `
-                <section class="board col mb-5 border border-dark">
+                <section class="board col mb-5 border border-dark" data-id=${board.id}>
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>                        
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
@@ -287,7 +287,7 @@ export let dom = {
   createNewChildBoard: function (board) {
     const boardInnerContainer = document.querySelector(".board-container");
     let childHTMLText = `
-            <section class="board col mb-5 border border-dark">
+            <section class="board col mb-5 border border-dark" data-id="${board.id}">
               <div class="board-header">
                   <span class="board-title">${board.title}</span>                        
                   <button class="new-card-btn" board-id="${board.id}">New Card</button>
@@ -306,21 +306,30 @@ export let dom = {
             </section>
             `;
     boardInnerContainer.insertAdjacentHTML("beforeend", childHTMLText);
+    let newRenameBoardBtn = boardInnerContainer.lastElementChild.querySelector(
+      ".rename-board-btn"
+    );
+    newRenameBoardBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      this.handleRenameBoardClick(newRenameBoardBtn);
+    });
+
     let newRemoveBoardBtn = boardInnerContainer.lastElementChild.querySelector(
       ".remove-board-btn"
-    );
+    );   
     newRemoveBoardBtn.addEventListener("click", (event) => {
       this.handleRemoveBoardClick(
         newRemoveBoardBtn.parentNode.parentNode,
         event
       );
     });
+
   },
   handleRemoveBoardClick: function (boardNode, clickEvent) {
     // boardNode is the node in the DOM tree corresponding to a board HTML element
     // and, thus, element and node are interchangeable for almost all purposes
     clickEvent.preventDefault();
-    dataHandler.deleteBoard(boardNode.id, (jsonResponse) => {
+    dataHandler.deleteBoard(boardNode.dataset.id, (jsonResponse) => {
       if (!jsonResponse.success) {
         window.alert(
           "Could not get reply from server. Will delete only temporarily!"
@@ -329,6 +338,22 @@ export let dom = {
     });
     // window.alert(`Deleted board with id=${boardNode.dataset.idOfBoard}`)
     boardNode.remove(); // this will remove all children of the node as well
+  },
+  handleRenameBoardClick: function (boardBtnElement) {
+    let boardTitle = boardBtnElement.parentNode.querySelector(".board-title").innerText;
+    let boardId = boardBtnElement.parentNode.parentNode.dataset.id;
+    let cardForm = `
+      <form>
+        <input type="text" name="title" placeholder="${boardTitle}" value="${boardTitle}">
+        <input type="submit" id="new-board-name-submit" value="Save">
+      </form>
+      `
+    boardBtnElement.insertAdjacentHTML("afterend", cardForm);
+    let form = document.querySelector('form')
+        form.addEventListener('submit', event => {
+            const formData = new FormData(event.target)
+            dataHandler.renameBoard(boardId, formData.get('title'));
+        })
   },
   createDropZone: function () {
       let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
@@ -359,28 +384,28 @@ export let dom = {
                     if (zoneStatus == 'new') {
                         droppedElement.setAttribute('class', 'new');
                         let postData = {'id': droppedElementId, 'status': '0'};
-                        console.log(postData);
+                        // console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     } else if (zoneStatus == 'inProgress') {
                         droppedElement.setAttribute('class', 'inProgress');
                         let postData = {'id': droppedElementId, 'status': '1'};
-                        console.log(postData);
+                        // console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     } else if (zoneStatus == 'testing') {
                         droppedElement.setAttribute('class', 'testing');
                         let postData = {'id': droppedElementId, 'status': '2'};
-                        console.log(postData);
+                        // console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     } else if (zoneStatus == 'done') {
                         droppedElement.setAttribute('class', 'done');
                         let postData = {'id': droppedElementId, 'status': '3'};
-                        console.log(postData);
+                        // console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
