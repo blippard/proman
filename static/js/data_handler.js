@@ -27,7 +27,7 @@ export let dataHandler = {
                 Accept: "application/json",
             },
         })
-            .then(callback(datayy));
+            .then(callback(data));
     },
     init: function () {
     },
