@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for, request
-from util import json_response
+from flask import Flask, render_template, url_for, request, Response
+from util import json_response, status_response
 
 import data_handler
 
@@ -40,29 +40,48 @@ def get_status(board_id: int):
 
 
 @app.route("/add-card", methods=["POST"])
-@json_response
-def add_a_new_card():
-    posted_data = request.json
-    if "title" in posted_data:
-        data_handler.create_new_card(posted_data)
+@status_response
+def add_a_new_card():    
+    reply = {}
+    if ('Content-Type' in request.headers) and (request.headers['Content-Type'] == 'application/json'):
+        posted_data = request.json        
+        if "title" in posted_data:
+            data_handler.create_new_card(posted_data)
+            # reply["json_data"] = {} # need to return something in the reply here        
+            # return reply
+        else:
+            reply["json_data"] = {"STATUS_TEXT": "Mangled data"}
+            reply["status"] = 400
+            return reply
     else:
-        return "Mangled data", 400
+        reply["json_data"] = {"STATUS_TEXT": "Unsupported media type (expecting application/json)"}
+        reply["status"] = 415
+        return reply
 
 
 @app.route("/add-board", methods=["POST"])
-@json_response
+@status_response
 def add_a_new_board():
     """
     Gets the board title from the (JSON) POST request and
     writes it in server database (csv)
     """
-    posted_data = request.json
-    if "title" in posted_data:
-        return data_handler.createback_new_board(posted_data["title"])
+    reply = {}
+    if ('Content-Type' in request.headers) and (request.headers['Content-Type'] == 'application/json'):
+        posted_data = request.json        
+        if "title" in posted_data:
+            reply["json_data"] = data_handler.createback_new_board(posted_data["title"])
+            return reply
+        else:
+            reply["json_data"] = {"STATUS_TEXT": "Mangled data"}
+            reply["status"] = 400
+            return reply
     else:
-        return "Mangled data", 400
-    # I don't think the above is a proper JSON server response with status: 400
+        reply["json_data"] = {"STATUS_TEXT": "Unsupported media type (expecting application/json)"}
+        reply["status"] = 415
+        return reply
 
+   
 
 def main():
     app.run(debug=True)
