@@ -72,6 +72,11 @@ export let dataHandler = {
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
     },
+    createNewColumn: function (columnTitle, boardId, callback) {
+        this._api_post(`/add-column/${boardId}`, (response) => {
+            callback(response);
+        })
+    },
     // here comes more features
     camelize: function (str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {
