@@ -90,6 +90,8 @@ export let dom = {
     initAddColumn: function (event) {
         let boardSection = event.target.parentNode.parentNode;
         if (boardSection.tagName === 'SECTION' && boardSection.classList.contains('board')) {
+            document.querySelector('#submitModalTitle').innerText = 'Add new column';
+            document.querySelector('#submitModalInputPrepend').innerText = 'Column name:';
             let submitModal = document.querySelector('#submitModal');
             submitModal.dataset.boardId = event.target.dataset.boardId;
             submitModal.dataset.submitAction = event.target.dataset.submitAction;
@@ -99,9 +101,25 @@ export let dom = {
     initModalSubmit: function () {
         document.querySelector('#modalSubmitButton').addEventListener('click', () => {
             let submitModal = document.querySelector('#submitModal')
-            if (submitModal.dataset.submitAction === "addColumn") {
-                dataHandler.createNewColumn();
+            if (submitModal.querySelector('#submitModalInput').value) {
+                if (submitModal.dataset.submitAction === "addColumn") {
+                    let boardId = submitModal.dataset.boardId;
+                    let columnTitle = submitModal.querySelector('#submitModalInput').value;
+                    console.log(columnTitle);
+                    dataHandler.createNewColumn(columnTitle, boardId, (data) => {
+                        this.addNewColumn(boardId, data.columnTitle);
+                    });
+                }
             }
         })
+    },
+    addNewColumn: function (boardId, columnTitle) {
+        let board = document.querySelector(`#board${boardId}`);
+        let newColumn = `
+        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}">
+            <div class="'card-column-title text-center border-bottom border-dark mb-2'">${columnTitle}</div>
+        </div>
+        `
+        board.insertAdjacentHTML('beforeend', newColumn);
     }
 };
