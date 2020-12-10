@@ -95,7 +95,6 @@ export let dom = {
             let submitModal = document.querySelector('#submitModal');
             submitModal.dataset.boardId = event.target.dataset.boardId;
             submitModal.dataset.submitAction = event.target.dataset.submitAction;
-            console.log(submitModal.dataset.boardId, submitModal.dataset.submitAction);
         }
     },
     initModalSubmit: function () {
@@ -105,7 +104,6 @@ export let dom = {
                 if (submitModal.dataset.submitAction === "addColumn") {
                     let boardId = submitModal.dataset.boardId;
                     let columnTitle = submitModal.querySelector('#submitModalInput').value;
-                    console.log(columnTitle);
                     dataHandler.createNewColumn(columnTitle, boardId, (data) => {
                         this.addNewColumn(boardId, data.columnTitle);
                     });
