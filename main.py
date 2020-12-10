@@ -33,6 +33,68 @@ def get_cards_for_board(board_id: int):
     return data_handler.get_cards_for_board(board_id)
 
 
+@app.route("/get-board-statuses/<int:board_id>")
+@json_response
+def get_status(board_id: int):
+    return data_handler.get_board_statuses(board_id)
+
+
+@app.route("/add-card", methods=["POST"])
+@json_response
+def add_a_new_card():
+    posted_data = request.json
+    if "title" in posted_data:
+        return data_handler.create_new_card(posted_data)
+    else:
+        return "Mangled data", 400
+
+
+@app.route("/rename-board", methods=["POST"])
+@json_response
+def rename_board():
+    posted_data = request.json
+    if "title" in posted_data:
+        data_handler.rename_board(posted_data)
+    else:
+        return "Mangled data", 400
+
+
+@app.route("/rename-column", methods=["POST"])
+@json_response
+def rename_column():
+    posted_data = request.json
+    if "title" in posted_data:
+        data_handler.rename_column(posted_data)
+    else:
+        return "Mangled data", 400
+
+
+# NOT YET
+# @app.route("/rename-card", methods=["POST"])
+# @json_response
+# def rename_card():
+#     posted_data = request.json
+#     if "title" in posted_data:
+#         data_handler.rename_card(posted_data)
+#     else:
+#         return "Mangled data", 400
+
+
+@app.route("/add-board", methods=["POST"])
+@json_response
+def add_a_new_board():
+    """
+    Gets the board title from the (JSON) POST request and
+    writes it in server database (csv)
+    """
+    posted_data = request.json
+    if "title" in posted_data:
+        return data_handler.createback_new_board(posted_data["title"])
+    else:
+        return "Mangled data", 400
+    # I don't think the above is a proper JSON server response with status: 400
+
+
 @app.route('/registration', methods=['POST'])
 @json_response
 def registration():

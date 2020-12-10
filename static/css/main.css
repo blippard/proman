@@ -1,5 +1,36 @@
-#boards {
-    background-color: green;
+
+.new-card-btn {
+    font-size: 10px;
+    font-family: KacstFarsi;
+    border-radius: 50%;
+    background-color: darkolivegreen;
+    color: white;
+}
+
+.top-btn-container {
+    display: flex;
+    flex-direction: row-reverse;
+    margin: 0.5rem;
+}
+
+.new {
+    width: inherit;
+    background-color: red;
+}
+
+.inProgress {
+    width: inherit;
+    background-color: orange;
+}
+
+.testing {
+    width: inherit;
+    background-color: lightblue;
+}
+
+.done {
+    width: inherit;
+    background-color: limegreen;
 }
 
 #password {
