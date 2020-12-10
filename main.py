@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request
 from util import json_response
 
 import data_handler
@@ -37,6 +37,12 @@ def get_cards_for_board(board_id: int):
 @json_response
 def get_status(board_id: int):
     return data_handler.get_board_statuses(board_id)
+
+
+@app.route("/add-column/<int:board_id>", methods=['POST'])
+@json_response
+def add_column(board_id: int):
+    data_handler.add_status_to_board(board_id, request.get_json())
 
 
 def main():
