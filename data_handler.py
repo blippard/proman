@@ -161,3 +161,15 @@ def get_user_for_login(username, password):
                 if username == row[1]:
                     if verify_password(password, row[2]):
                         return row
+
+def update_cards(card_update_data):
+    cards = persistence.get_cards()
+    for card in cards:
+        if card['id'] == card_update_data['id']:
+            card['status_id'] = card_update_data['status']
+    all_cards_list = [list(card.values()) for card in cards]
+    all_cards_list.insert(0, persistence.CARDS_HEADER)
+    persistence.overwrite_csv(persistence.CARDS_FILE, all_cards_list)
+
+# if __name__ == '__main__':
+#     pass
