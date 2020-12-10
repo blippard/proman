@@ -101,7 +101,7 @@ export let dom = {
                 `
             }
             boardList += `
-                <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
+                <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}" data-id="${board.id}">
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
                         <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
@@ -258,7 +258,7 @@ export let dom = {
                 `
             }
         let childHTMLText = `
-            <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
+            <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}" data-id="${board.id}">
                 <div class="board-header">
                     <span class="board-title">${board.title}</span>
                     <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
@@ -300,8 +300,8 @@ export let dom = {
     handleRemoveBoardClick: function (boardNode, clickEvent) {
         // boardNode is the node in the DOM tree corresponding to a board HTML element
         // and, thus, element and node are interchangeable for almost all purposes
-        clickEvent.preventDefault();
-        let boardId = parseInt(boardNode.id.substring(9)) // remove the first 10 chars of id=
+        clickEvent.preventDefault();        
+        let boardId = boardNode.dataset.id
         dataHandler.deleteBoard(boardId, (jsonResponse) => {
         if (!(jsonResponse.id)) {
             window.alert(
