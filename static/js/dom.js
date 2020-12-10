@@ -73,8 +73,10 @@ export let dom = {
 
                 let form = document.querySelector('form')
                     form.addEventListener('submit', event => {
+                        event.preventDefault();
                         const formData = new FormData(event.target)
                         dataHandler.createNewCard(formData.get('title'), boardId, formData.get('status'));
+
                     })
             })
         }
@@ -104,7 +106,7 @@ export let dom = {
                 }
                 let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
                 let cardToAdd = `
-                    <div id="${card.id}" draggable="true" class="card mx-2 mb-2 border border-dark text-center">
+                    <div id="${card.id}" draggable="true" class="${dataHandler.camelize(card.status_id)}" card="true">
                         ${card.title}
                     </div>
                 `;
@@ -131,42 +133,70 @@ export let dom = {
   },
     createDropZone: function () {
         let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
-        let cards = document.querySelectorAll('.card.mx-2.mb-2.border.border-dark.text-center');
+        let cards = document.querySelectorAll('div[card="true"]');
 
         for (let card of cards) {
             card.addEventListener('dragstart', event => {
                 event.dataTransfer.setData("text/plain", card.id);
             });
         };
+        dom.setUpDropZone(dropZone);
 
-        for (let zone of dropZone) {
-            zone.addEventListener('dragover', event => {
-                event.preventDefault();
-            })
-        };
-
-        for (let zone of dropZone) {
-            zone.addEventListener('drop', event => {
-                let zoneStatus = zone.getAttribute('status');
-                let droppedElementId = event.dataTransfer.getData("text/plain");
-                let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
-                zone.appendChild(droppedElement);
-
-                if (zoneStatus == 'new') {
-                    droppedElement.setAttribute('class', 'new');
-                } else if (zoneStatus == 'inProgress') {
-                    droppedElement.setAttribute('class', 'inProgress');
-                } else if (zoneStatus == 'testing') {
-                    droppedElement.setAttribute('class', 'testing');
-                } else if (zoneStatus == 'done') {
-                    droppedElement.setAttribute('class', 'done');
-                }
-
-
-
-
-            });
-        }
-    }
+    },
+    createNewChildBoard: function (board) {
+    const boardInnerContainer = document.querySelector(".board-container");
+    let childHTMLText = `
+              <section class="board col mb-5 border border-dark">
+                <div class="board-header">
+                    <span class="board-title">${board.title}</span>                    
+                    <button class="new-card-btn" board-id="${board.id}">New Card</button>
+                    <button class="remove-board-btn">Delete Board 🗑️</button>
+                    <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                    </button>
+                </div>
+                <div class="row collapse" id="board${board.id}">
+                    
+                </div>
+              </section>
+            `;
+    boardInnerContainer.insertAdjacentHTML("beforeend", childHTMLText);
+    let newRemoveBoardBtn = boardInnerContainer.lastElementChild.querySelector(
+      ".remove-board-btn"
+    );
+    newRemoveBoardBtn.addEventListener("click", (event) => {
+      this.handleRemoveBoardClick(
+        newRemoveBoardBtn.parentNode.parentNode,
+        event
+      );
+    });
+  },
     // here comes more features
+    setUpDropZone: function (dropZone) {
+            for (let zone of dropZone) {
+                zone.addEventListener('dragover', event => {
+                    event.preventDefault();
+                })
+            };
+
+
+            for (let zone of dropZone) {
+                zone.addEventListener('drop', event => {
+                    let zoneStatus = zone.getAttribute('status');
+                    let droppedElementId = event.dataTransfer.getData("text/plain");
+                    let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
+                    zone.appendChild(droppedElement);
+
+                    if (zoneStatus == 'new') {
+                        droppedElement.setAttribute('class', 'new');
+                    } else if (zoneStatus == 'inProgress') {
+                        droppedElement.setAttribute('class', 'inProgress');
+                    } else if (zoneStatus == 'testing') {
+                        droppedElement.setAttribute('class', 'testing');
+                    } else if (zoneStatus == 'done') {
+                        droppedElement.setAttribute('class', 'done');
+                    }
+
+                });
+            }
+        },
 };
