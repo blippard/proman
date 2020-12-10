@@ -3,6 +3,7 @@ import {dataHandler} from "./data_handler.js";
 
 export let dom = {
     init: function () {
+        let homeButton = document.getElementById('home');
         let registrationButton = document.getElementById('registration-button');
         let registerSubmit = document.getElementById('reg-button');
         let loginButton = document.getElementById('login-button');
@@ -10,6 +11,11 @@ export let dom = {
         let boards = document.getElementById('boards');
         let registrationContainer = document.getElementById('registration-container');
         let loginContainer = document.getElementById('login-container');
+        homeButton.addEventListener('click', () => {
+            registrationContainer.style.display = 'none';
+            loginContainer.style.display = 'none';
+            boards.style.display = 'block';
+        })
         registrationButton.addEventListener('click', () => {
             registrationContainer.style.display = 'flex';
             boards.style.display = 'none';
