@@ -43,6 +43,7 @@ def get_status(board_id: int):
 @json_response
 def add_a_new_card():
     posted_data = request.json
+    print(posted_data)
     if "title" in posted_data:
         return data_handler.create_new_card(posted_data)
     else:
@@ -63,6 +64,15 @@ def add_a_new_board():
         return "Mangled data", 400
     # I don't think the above is a proper JSON server response with status: 400
 
+
+@app.route("/update-card", methods=["POST"])
+@json_response
+def update_card():
+    posted_data = request.json
+    if "id" in posted_data:
+        data_handler.update_cards(posted_data)
+    else:
+        return "Mangled data", 400
 
 def main():
     app.run(debug=True)
