@@ -179,7 +179,7 @@ canvas {
 
 
 /* Minecraft Button */
-.new-card-btn, .rename-board-btn, .remove-board-btn, .mc-button {
+.new-card-btn, .rename-board-btn, .mc-button {
     color: #ddd;
     text-shadow: 2px 2px #000A;
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
@@ -196,6 +196,14 @@ canvas {
     font-size: 16px;
     cursor: url(../images/cursor.cur), default;
 
+}
+
+/* Minecraft button that displays differently - element with both classes*/
+.remove-board-btn.mc-button {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
 .new-card-btn:hover, .rename-board-btn:hover, .mc-button:hover {

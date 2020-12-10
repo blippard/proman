@@ -112,7 +112,7 @@ export let dom = {
                         <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">
                           Rename Board
                         </button>
-                        <button class="remove-board-btn">Delete Board &#x1F5D1</button>                       
+                        <button class="remove-board-btn mc-button">Delete Board <img src="/static/css/images/trashcan.png" height="30" alt="&#x1F5D1"></button>                       
                     </div>
                     <div class="row collapse" id="board${board.id}">
                         ${columnlist}
@@ -269,7 +269,7 @@ export let dom = {
                     <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">
                         Rename Board
                     </button>
-                    <button class="remove-board-btn">Delete Board &#x1F5D1</button>
+                    <button class="remove-board-btn mc-button">Delete Board <img src="/static/css/images/trashcan.png" height="30" alt="&#x1F5D1"></button>
 
                 </div>
                 <div class="row collapse" id="board${board.id}">
