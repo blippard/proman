@@ -27,7 +27,7 @@ export let dataHandler = {
             },
             body: JSON.stringify(data),
         })
-            .then(callback)
+            .then(callback(data))
             .catch((error) => {
                 console.log('Error:', error);
             });
@@ -73,7 +73,7 @@ export let dataHandler = {
         // creates new card, saves it and calls the callback function with its data
     },
     createNewColumn: function (columnTitle, boardId, callback) {
-        this._api_post(`/add-column/${boardId}`, (response) => {
+        this._api_post(`/add-column/${boardId}`, {'columnTitle' : columnTitle}, (response) => {
             callback(response);
         })
     },
