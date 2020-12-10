@@ -168,3 +168,9 @@ def rename_column(old_name, new_name):
 # NOT YET
 # def rename_card(card_id, new_name):
 #     _edit_card_csv(CARDS_FILE, card_id, new_name)
+
+
+def overwrite_csv(file_path, new_data):
+    with open(file_path, 'w', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(new_data)

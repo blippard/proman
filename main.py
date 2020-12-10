@@ -132,6 +132,18 @@ def login():
         return 'Failure'
 
 
+@app.route("/update-card", methods=["POST"])
+@json_response
+def update_card():
+
+    @construct_default_reply
+    def basic_function(request_object):
+        posted_data = request_object.json
+        if "id" in posted_data:
+            data_handler.update_cards(posted_data)
+    
+    return basic_function(request_object=request)
+
 def main():
     app.run(debug=True)
 

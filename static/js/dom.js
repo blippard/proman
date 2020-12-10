@@ -281,19 +281,23 @@ export let dom = {
   createNewChildBoard: function (board) {
     const boardInnerContainer = document.querySelector(".board-container");
     let childHTMLText = `
-              <section class="board col mb-5 border border-dark">
-                <div class="board-header">
-                    <span class="board-title">${board.title}</span>                    
-                    <button class="new-card-btn" board-id="${board.id}">New Card</button>
-                    <button class="remove-board-btn">Delete Board &#x1F5D1</button>
-                    <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
-                      &#x2304
-                    </button>
-                </div>
-                <div class="row collapse" id="board${board.id}">
-                    
-                </div>
-              </section>
+            <section class="board col mb-5 border border-dark">
+              <div class="board-header">
+                  <span class="board-title">${board.title}</span>                        
+                  <button class="new-card-btn" board-id="${board.id}">New Card</button>
+                  <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">
+                    Rename Board
+                  </button>
+                  <button class="remove-board-btn">Delete Board &#x1F5D1</button>
+                  <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                    &#x2304
+                  </button>
+                  
+              </div>
+              <div class="row collapse" id="board${board.id}">
+                  
+              </div>
+            </section>
             `;
     boardInnerContainer.insertAdjacentHTML("beforeend", childHTMLText);
     let newRemoveBoardBtn = boardInnerContainer.lastElementChild.querySelector(
@@ -340,25 +344,43 @@ export let dom = {
               })
           };
 
-
           for (let zone of dropZone) {
               zone.addEventListener('drop', event => {
                   let zoneStatus = zone.getAttribute('status');
                   let droppedElementId = event.dataTransfer.getData("text/plain");
                   let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
                   zone.appendChild(droppedElement);
-
-                  if (zoneStatus == 'new') {
-                      droppedElement.setAttribute('class', 'new');
-                  } else if (zoneStatus == 'inProgress') {
-                      droppedElement.setAttribute('class', 'inProgress');
-                  } else if (zoneStatus == 'testing') {
-                      droppedElement.setAttribute('class', 'testing');
-                  } else if (zoneStatus == 'done') {
-                      droppedElement.setAttribute('class', 'done');
-                  }
-
+                    if (zoneStatus == 'new') {
+                        droppedElement.setAttribute('class', 'new');
+                        let postData = {'id': droppedElementId, 'status': '0'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    } else if (zoneStatus == 'inProgress') {
+                        droppedElement.setAttribute('class', 'inProgress');
+                        let postData = {'id': droppedElementId, 'status': '1'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    } else if (zoneStatus == 'testing') {
+                        droppedElement.setAttribute('class', 'testing');
+                        let postData = {'id': droppedElementId, 'status': '2'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    } else if (zoneStatus == 'done') {
+                        droppedElement.setAttribute('class', 'done');
+                        let postData = {'id': droppedElementId, 'status': '3'};
+                        console.log(postData);
+                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+                        dataHandler._data["cards"].push(jsonResponse);
+                        })
+                    }
               });
           }
+
       },
 };
