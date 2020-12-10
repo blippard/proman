@@ -228,3 +228,24 @@ section.board{
  input, option, select {
      background: #a9a6b1;
  }
+
+
+.new {
+    width: inherit;
+    background-color: red;
+}
+
+.inProgress {
+    width: inherit;
+    background-color: orange;
+}
+
+.testing {
+    width: inherit;
+    background-color: lightblue;
+}
+
+.done {
+    width: inherit;
+    background-color: limegreen;
+}
