@@ -24,6 +24,33 @@ def _read_csv(file_name):
         return formatted_data
 
 
+def _write_csv(file_name, data_type, list_of_dict):
+    """
+    Overwrites the content of a .csv file with provided data (a non-empty list)
+    :param file_name: relative path to file
+    :param data_type: a key ('boards', 'statuses') to help determine the
+      header for the .csv (this is a canonical order for the keys in the dicts
+      Each dict could have its keys sorted differently - by insertion order -)
+    :param list_of_dict: list of dictionaries (each dictionary
+      is a row in the .csv) -> function assumes all dicts
+      have the same keys and these correspond to the headers of given data_type
+    """
+    with open(file_name, 'w', newline='') as csvfile:
+        if len(list_of_dict) > 0:
+            if data_type == 'boards':
+                my_fieldnames = BOARDS_HEADER
+            elif data_type == 'cards':
+                my_fieldnames = CARDS_HEADER
+            elif data_type == 'statuses':
+                my_fieldnames = STATUSES_HEADER
+            else:
+                print('Wrong data type!')
+                return
+            writer = csv.DictWriter(csvfile, fieldnames=my_fieldnames)
+            writer.writeheader()    # writes the first row of the .csv (the keys in my_fieldnames)
+            writer.writerows(list_of_dict)
+
+
 def _get_data(data_type, file, force):
     """
     Reads defined type of data from file or cache
