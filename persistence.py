@@ -138,6 +138,6 @@ def rename_board(id, new_name):
 def rename_column(old_name, new_name):
     _edit_status_csv(STATUSES_FILE, old_name, new_name)
 
-
-def rename_card(card_id, new_name):
-    _edit_card_csv(CARDS_FILE, card_id, new_name)
+# NOT YET
+# def rename_card(card_id, new_name):
+#     _edit_card_csv(CARDS_FILE, card_id, new_name)

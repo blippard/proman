@@ -108,12 +108,13 @@ export let dataHandler = {
             this._data["statuses"].push(jsonResponse);
         })
     },
-    renameCard: function (cardId, title, callback) {
-        let newNameColumn = {'card-id': cardId, 'title': title};
-        this._api_post('/rename-column', newNameCard, (jsonResponse) => {
-            this._data["statuses"].push(jsonResponse);
-        })
-    },
+    // NOT YET
+    // renameCard: function (cardId, title, callback) {
+    //     let newNameColumn = {'card-id': cardId, 'title': title};
+    //     this._api_post('/rename-column', newNameCard, (jsonResponse) => {
+    //         this._data["statuses"].push(jsonResponse);
+    //     })
+    // },
     // here comes more features
     camelize: function (str) {
     return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function(word, index) {

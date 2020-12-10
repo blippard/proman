@@ -69,14 +69,15 @@ def rename_column():
         return "Mangled data", 400
 
 
-@app.route("/rename-card", methods=["POST"])
-@json_response
-def rename_card():
-    posted_data = request.json
-    if "title" in posted_data:
-        data_handler.rename_card(posted_data)
-    else:
-        return "Mangled data", 400
+# NOT YET
+# @app.route("/rename-card", methods=["POST"])
+# @json_response
+# def rename_card():
+#     posted_data = request.json
+#     if "title" in posted_data:
+#         data_handler.rename_card(posted_data)
+#     else:
+#         return "Mangled data", 400
 
 
 @app.route("/add-board", methods=["POST"])

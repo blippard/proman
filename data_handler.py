@@ -106,8 +106,9 @@ def rename_column(column_data):
     return row_dict
 
 
-def rename_card(card_data):
-    card_id = card_data['card-id']
-    new_title = card_data['title']
-    persistence.rename_card(card_id, new_title)
-    return row_dict
+# # NOT YET
+# def rename_card(card_data):
+#     card_id = card_data['card-id']
+#     new_title = card_data['title']
+#     persistence.rename_card(card_id, new_title)
+#     return row_dict

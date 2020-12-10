@@ -146,31 +146,10 @@ export let dom = {
                 let cardToAdd = `
                     <div class="card" card-id="${card.id}" card-title="${card.title}">
                         ${card.title}
-                        <button class="rename-card-btn" card-id="${card.id}" card-title="${card.title}">Rename</button>
                     </div>
-                
                 `;
                 cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
 
-                let cards = document.querySelectorAll('.rename-card-btn');
-                for (let cardBtn of cards) {
-                    let cardId = cardBtn.getAttribute('card-id');
-                    let cardTitle = cardBtn.getAttribute('card-title');
-                    cardBtn.addEventListener('click', function () {
-                        let cardForm = `
-                        <form>
-                        <input type="text" name="title" placeholder="${cardTitle}" value="${cardTitle}">
-                        <input type="submit" id="new-card-name-submit" value="Save">
-                        </form>
-                        `
-                        cardBtn.insertAdjacentHTML("afterend", cardForm);
-                        let form = document.querySelector('form')
-                            form.addEventListener('submit', event => {
-                                const formData = new FormData(event.target)
-                                dataHandler.renameCard(cardId, formData.get('title'));
-                            })
-                    })
-                }
                     }
         }
     },
