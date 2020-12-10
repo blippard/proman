@@ -5,9 +5,8 @@ BOARDS_FILE = './data/boards.csv'
 CARDS_FILE = './data/cards.csv'
 
 STATUSES_HEADER = ['id', 'title']
-BOARDS_HEADER = ['id', 'title']
+BOARDS_HEADER = ['id', 'title', 'board_statuses']
 CARDS_HEADER = ['id', 'board_id', 'title', 'status_id', 'order']
-
 
 _cache = {}  # We store cached data in this dict to avoid multiple file readings
 
@@ -109,13 +108,10 @@ def get_boards(force=False):
 def get_cards(force=False):
     return _get_data('cards', CARDS_FILE, force)
 
+
+def append_cards(board_dict):
+    _append_csv(CARDS_FILE, 'cards', board_dict)
+
+
 def append_boards(board_dict):
-    _append_csv(BOARDS_FILE, 'boards', board_dict)    
-
-
-if __name__ == "__main__":
-    test_list_of_dict = [{'id': 1, 'title': 'alphabet'}, {'id': 1024, 'title': 'spam, bacon & eggs'}]
-    single_dict = {'title': 'unorthodox', 'id': 2}
-    test_file = './data/test.csv'
-    _write_csv(test_file, 'boards', test_list_of_dict)
-    _append_csv(test_file, 'boards', single_dict)
+    _append_csv(BOARDS_FILE, 'boards', board_dict)

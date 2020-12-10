@@ -16,7 +16,13 @@ def get_boards():
     Gather all boards
     :return:
     """
-    return persistence.get_boards(force=True)
+    all_boards = persistence.get_boards(force=True)
+    for board in all_boards:
+        temp_statuses = board['board_statuses'].split(',')
+        for i, status in enumerate(temp_statuses):
+            temp_statuses[i] = get_card_status(int(status))
+        board['board_statuses'] = temp_statuses
+    return all_boards
 
 
 def get_cards_for_board(board_id):
@@ -30,6 +36,37 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
+def get_board_statuses(boardId):
+    persistence.clear_cache()
+    all_boards = persistence.get_boards()
+    all_statuses = persistence.get_statuses()
+    matching_statuses = []
+    for board in all_boards:
+        if board['id'] == str(boardId):
+            board_statuses = board['board_statuses'].split(',')
+            for status in all_statuses:
+                if status['id'] in board_statuses:
+                    matching_statuses.append(status)
+    return matching_statuses
+
+
+def get_new_id_for_cards():
+    card_id = len(persistence.get_cards()) + 1
+    persistence.clear_cache()
+    return card_id
+
+
+def create_new_card(card_data):
+    order = 0
+    cards_dictionary = {'id': get_new_id_for_cards(),
+                        'board_id': card_data['board_id'],
+                        'title': card_data['title'],
+                        'status_id': card_data['status_id'],
+                        'order': order
+                        }
+    persistence.append_cards(cards_dictionary)
+
+
 def get_new_id_for_boards():
     """
     Gets a new (valid) id for a board
@@ -39,7 +76,7 @@ def get_new_id_for_boards():
     id_list = []
     for board in all_boards:
         try:
-           new_id = int(board['id'])
+            new_id = int(board['id'])
         except (ValueError, TypeError):
             pass
         else:
@@ -48,12 +85,8 @@ def get_new_id_for_boards():
     max_id = max(id_list)
     return max_id + 1
 
+
 def createback_new_board(title):
-    row_dict = {'id': str(get_new_id_for_boards()), 'title': title}
+    row_dict = {'id': str(get_new_id_for_boards()), 'title': title, 'board_statuses': '0,1,2,3'}
     persistence.append_boards(row_dict)
     return row_dict
-
-
-if __name__ == "__main__":
-    print(get_new_id_for_boards())
-    create_new_board('test')

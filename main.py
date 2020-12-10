@@ -33,19 +33,36 @@ def get_cards_for_board(board_id: int):
     return data_handler.get_cards_for_board(board_id)
 
 
-@app.route("/add-board", methods = ["POST"])
+@app.route("/get-board-statuses/<int:board_id>")
+@json_response
+def get_status(board_id: int):
+    return data_handler.get_board_statuses(board_id)
+
+
+@app.route("/add-card", methods=["POST"])
+@json_response
+def add_a_new_card():
+    posted_data = request.json
+    if "title" in posted_data:
+        data_handler.create_new_card(posted_data)
+    else:
+        return "Mangled data", 400
+
+
+@app.route("/add-board", methods=["POST"])
 @json_response
 def add_a_new_board():
     """
-    Gets the board title from the (JSON) POST request and 
+    Gets the board title from the (JSON) POST request and
     writes it in server database (csv)
     """
-    posted_data = request.json    
-    if "title" in posted_data:        
+    posted_data = request.json
+    if "title" in posted_data:
         return data_handler.createback_new_board(posted_data["title"])
     else:
         return "Mangled data", 400
     # I don't think the above is a proper JSON server response with status: 400
+
 
 def main():
     app.run(debug=True)
