@@ -42,10 +42,14 @@ h1 {
 section.board {
     border: aliceblue;
     background: rgba(182, 182, 182, 0.8);
+    box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
+    padding-bottom: 2px;
 }
 
 .board-header {
     background: #999 url('https://i.ibb.co/rb2TWXL/bgbtn.png');
+    box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
+    padding-bottom: 2px;
 }
 
 .board-title {
@@ -53,6 +57,7 @@ section.board {
     display: inline-block;
     font-size: 20px;
     color: #ddd;
+
 }
 
 .board-title, .board-add, .board-toggle {
@@ -236,22 +241,32 @@ input, option, select {
 
 .new {
     width: inherit;
-    background-color: red;
+    background-color: #e77d7d;
+    box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
+    padding-bottom: 2px;
 }
 
 .inProgress {
     width: inherit;
-    background-color: orange;
+    background-color: #eebe6f;
+    box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
+    padding-bottom: 2px;
+
 }
 
 .testing {
     width: inherit;
-    background-color: lightblue;
+    background-color: #add8e6;
+    box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
+    padding-bottom: 2px;
 }
 
 .done {
     width: inherit;
-    background-color: limegreen;
+    background-color: #79c979;
+    box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
+    padding-bottom: 2px;
+
 }
 
 #registration-container, #login-container {
@@ -269,4 +284,10 @@ input, option, select {
 
 #login-password, #confirm_password {
     margin-bottom: 10px
+}
+
+.card-column-title {
+    box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
+    padding-bottom: 2px;
+    font-size: 20px;
 }
