@@ -34,7 +34,7 @@ export let dom = {
                 <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
-                        <button class="btn btn-dark add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}">Add column</button>
+                        <button class="btn btn-dark add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
                         <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
                     </div>
                     <div class="row collapse" id="board${board.id}">
@@ -87,9 +87,12 @@ export let dom = {
         }
     },
     initAddColumn: function (event) {
-        let boardSection = event.target.parentNode.parentNode
+        let boardSection = event.target.parentNode.parentNode;
         if (boardSection.tagName === 'SECTION' && boardSection.classList.contains('board')) {
-            console.log(event.target.dataset.boardId);
+            let submitModal = document.querySelector('#submitModal');
+            submitModal.dataset.boardId = event.target.dataset.boardId;
+            submitModal.dataset.submitAction = event.target.dataset.submitAction;
+            console.log(submitModal.dataset.boardId, submitModal.dataset.submitAction);
         }
-    }
+    },
 };
