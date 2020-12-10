@@ -4,19 +4,24 @@ import {dataHandler} from "./data_handler.js";
 export let dom = {
     init: function () {
         let registrationButton = document.getElementById('registration-button');
-        let registerSubmit = document.getElementById('reg-button')
+        let registerSubmit = document.getElementById('reg-button');
+        let loginButton = document.getElementById('login-button');
+        let loginSubmit = document.getElementById('login-submit-button');
+        let menuButton = document.getElementById('menu');
+        let boards = document.getElementById('boards');
+        let registrationContainer = document.getElementById('registration-container');
+        let loginContainer = document.getElementById('login-container');
         registrationButton.addEventListener('click', () => {
-            let registrationContainer = document.getElementById('registration-container');
-            let menuButton = document.getElementById('menu');
-            let boards = document.getElementById('boards');
             registrationContainer.style.display = 'flex';
             menuButton.style.display = 'none';
             boards.style.display = 'none';
         });
+        loginButton.addEventListener('click', () => {
+            loginContainer.style.display = 'flex';
+            menuButton.style.display = 'none';
+            boards.style.display = 'none';
+        });
         registerSubmit.addEventListener('click', () => {
-            let registrationContainer = document.getElementById('registration-container')
-            let menuButton = document.getElementById('menu');
-            let boards = document.getElementById('boards');
             let username = document.getElementById('username');
             let password = document.getElementById('password');
             let confirmPassword = document.getElementById('confirm_password');
@@ -34,10 +39,26 @@ export let dom = {
                 }
             })
         });
+        loginSubmit.addEventListener('click', () => {
+            let username = document.getElementById('login-username');
+            let password = document.getElementById('login-password');
+            this.postdata('http://127.0.0.1:5000/login', {
+                username: username.value,
+                password: password.value
+            }).then((response) => {
+                if (response === 'Failure') {
+                    alert('Invalid username or password!')
+                } else {
+                    loginContainer.style.display = 'none';
+                    menuButton.style.display = 'block';
+                    boards.style.display = 'block';
+                }
+            })
+        })
         // This function should run once, when the page is loaded.
     },
     postdata: async function (url = '', data) {
-        const response = await fetch(url,{
+        const response = await fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

@@ -47,6 +47,19 @@ def registration():
             return 'Success'
 
 
+@app.route('/login', methods=['POST'])
+@json_response
+def login():
+    if request.method == 'POST':
+        username = request.json['username']
+        password = request.json['password']
+        user = data_handler.get_user_for_login(username, password)
+        if user:
+            return 'Success'
+        else:
+            return 'Failure'
+
+
 def main():
     app.run(debug=True)
 

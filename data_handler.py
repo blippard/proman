@@ -63,3 +63,17 @@ def add_user(username, password):
 def hash_password(plain_text_password: str):
     hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
     return hashed_bytes.decode('utf-8')
+
+
+def verify_password(plain_text_password: str, hashed_password: str):
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
+
+def get_user_for_login(username, password):
+    with open('./data/user.csv') as csv_file:
+        csv_reader = csv.reader(csv_file, delimiter=',')
+        for row in csv_reader:
+            if row[0] != 'id':
+                if username == row[1]:
+                    if verify_password(password, row[2]):
+                        return row
