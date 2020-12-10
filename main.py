@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for, request, Response
-from util import json_response, status_response
+from flask import Flask, render_template, url_for, request
+from util import json_response, status_response, construct_default_reply
 
 import data_handler
 
@@ -41,22 +41,16 @@ def get_status(board_id: int):
 
 @app.route("/add-card", methods=["POST"])
 @status_response
-def add_a_new_card():    
-    reply = {}
-    if ('Content-Type' in request.headers) and (request.headers['Content-Type'] == 'application/json'):
-        posted_data = request.json        
+def add_a_new_card():
+
+    @construct_default_reply
+    def basic_function(request_object):    
+        posted_data = request_object.json        
         if "title" in posted_data:
             data_handler.create_new_card(posted_data)
-            # reply["json_data"] = {} # need to return something in the reply here        
-            # return reply
-        else:
-            reply["json_data"] = {"STATUS_TEXT": "Mangled data"}
-            reply["status"] = 400
-            return reply
-    else:
-        reply["json_data"] = {"STATUS_TEXT": "Unsupported media type (expecting application/json)"}
-        reply["status"] = 415
-        return reply
+            return {}
+
+    return basic_function(request_object=request)
 
 
 @app.route("/add-board", methods=["POST"])
@@ -66,22 +60,14 @@ def add_a_new_board():
     Gets the board title from the (JSON) POST request and
     writes it in server database (csv)
     """
-    reply = {}
-    if ('Content-Type' in request.headers) and (request.headers['Content-Type'] == 'application/json'):
-        posted_data = request.json        
+    @construct_default_reply
+    def basic_function(request_object):
+        posted_data = request_object.json
         if "title" in posted_data:
-            reply["json_data"] = data_handler.createback_new_board(posted_data["title"])
-            return reply
-        else:
-            reply["json_data"] = {"STATUS_TEXT": "Mangled data"}
-            reply["status"] = 400
-            return reply
-    else:
-        reply["json_data"] = {"STATUS_TEXT": "Unsupported media type (expecting application/json)"}
-        reply["status"] = 415
-        return reply
+            return data_handler.createback_new_board(posted_data["title"])
 
-   
+    return basic_function(request_object=request)
+
 
 def main():
     app.run(debug=True)
