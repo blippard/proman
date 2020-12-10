@@ -20,13 +20,19 @@ export let dom = {
             let username = document.getElementById('username');
             let password = document.getElementById('password');
             let confirmPassword = document.getElementById('confirm_password');
-            registrationContainer.style.display = 'none';
-            menuButton.style.display = 'block';
-            boards.style.display = 'block';
             this.postdata('http://127.0.0.1:5000/registration', {
                 username: username.value,
                 password: password.value,
-                confirmPassword: confirmPassword.value})
+                confirmPassword: confirmPassword.value
+            }).then((response) => {
+                if (response === 'Failure') {
+                    alert('Username is already in use!')
+                } else {
+                    registrationContainer.style.display = 'none';
+                    menuButton.style.display = 'block';
+                    boards.style.display = 'block';
+                }
+            })
         });
         // This function should run once, when the page is loaded.
     },
