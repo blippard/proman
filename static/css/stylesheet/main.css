@@ -238,12 +238,15 @@ input, option, select {
     background: #a9a6b1;
 }
 
+input {}
+
 
 .new {
     width: inherit;
     background-color: #e77d7d;
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
     padding-bottom: 2px;
+    padding-left: 6px;
 }
 
 .inProgress {
@@ -251,14 +254,15 @@ input, option, select {
     background-color: #eebe6f;
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
     padding-bottom: 2px;
-
+    padding-left: 6px;
 }
 
 .testing {
     width: inherit;
-    background-color: #add8e6;
+    background-color: #92d7ef;
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
     padding-bottom: 2px;
+    padding-left: 6px;
 }
 
 .done {
@@ -266,7 +270,7 @@ input, option, select {
     background-color: #79c979;
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
     padding-bottom: 2px;
-
+    padding-left: 6px;
 }
 
 #registration-container, #login-container {
