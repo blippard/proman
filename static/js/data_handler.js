@@ -13,8 +13,8 @@ export let dataHandler = {
             method: 'GET',
             credentials: 'same-origin'
         })
-            .then(response => response.json())  // parse the response as JSON
-            .then(json_response => callback(json_response));  // Call the `callback` with the returned object
+        .then(response => response.json())  // parse the response as JSON
+        .then(json_response => callback(json_response));  // Call the `callback` with the returned object
     },
     _api_post: function (url, data, callback) {
         // it is not called from outside
@@ -27,8 +27,7 @@ export let dataHandler = {
                 Accept: "application/json",
             },
         })
-            .then((response) => response.json()) // parse the response as JSON
-            .then((json_response) => callback(json_response)); // Call the `callback` with the returned object
+            .then(callback(data));
     },
     init: function () {
     },
@@ -93,6 +92,11 @@ export let dataHandler = {
         let newNameBoard = {'board_id': boardId, 'title': title};
         this._api_post('/rename-board', newNameBoard, (jsonResponse) => {
             this._data["boards"].push(jsonResponse);
+        })
+    },
+    createNewColumn: function (columnTitle, boardId, callback) {
+        this._api_post(`/add-column/${boardId}`, {'columnTitle' : columnTitle}, (response) => {
+            callback(response);
         })
     },
     renameColumn: function (oldName, title, callback) {

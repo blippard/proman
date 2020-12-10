@@ -58,6 +58,7 @@ export let dom = {
             })
         })
         // This function should run once, when the page is loaded.
+        this.initModalSubmit();
         const newBoardBtn = document.querySelector(".add-board-btn");
         newBoardBtn.addEventListener("click", (event) => {
             this.handleAddBoardClick(event);
@@ -76,7 +77,8 @@ export let dom = {
     },
     loadBoards: function () {
         // retrieves boards and makes showBoards called
-        dataHandler.getBoards(function (boards) {
+        this.removeAllBoardElements();
+        dataHandler.getBoards(function(boards){
             dom.showBoards(boards);
             for (let board of boards) {
                 dom.loadCards(board.id);
@@ -89,20 +91,30 @@ export let dom = {
 
         let boardList = '';
 
-        for (let board of boards) {
+        for(let board of boards){
+            let columnlist = '';
+            for (let column of board.board_statuses){
+                columnlist += `
+                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}">
+                    <div class="card-column-title text-center border-bottom border-dark mb-2">${column}</div>
+                </div>
+                `
+            }
             boardList += `
-                <section class="board col mb-5 border border-dark">
+                <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
-                        <button class="btn btn-dark float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
+                        <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
+                        <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
                         <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">Rename Board</button>
                     </div>
                     <div class="row collapse" id="board${board.id}">
-                        
+                        ${columnlist}
                     </div>
                 </section>
             `;
+
         }
 
         const outerHtml = `
@@ -113,11 +125,16 @@ export let dom = {
 
         let boardsContainer = document.querySelector('#boards');
         boardsContainer.insertAdjacentHTML("beforeend", outerHtml);
+        let addColumnButtons = document.querySelectorAll('.add-column');
+        for (let button of addColumnButtons) {
+            button.addEventListener('click', (event) => this.initAddColumn(event));
+        }
 
         this.addCardEventListener();
         this.newNameBoardEventListener();
-    },
-    addCardEventListener: function () {
+        this.initColumnTitleRename();
+        },
+    addCardEventListener: function ()  {
         let newCardBtns = document.querySelectorAll('.new-card-btn');
 
         for (let cardBtn of newCardBtns) {
@@ -185,32 +202,6 @@ export let dom = {
             dom.showCard(cards);
         })
     },
-    showCard: function (card) {
-        // shows the cards of a board
-        // it adds necessary event listeners also
-        let board = document.querySelector(`#board${card.board_id}`);
-        if (`board${card.board_id}` == `${board.id}`) {
-            if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
-                let createCardColumn = document.createElement('div');
-                let createColumnTitle = document.createElement('div');
-                createCardColumn.setAttribute('class', `col border border-dark p-0 ${dataHandler.camelize(card.status_id)}${card.board_id}`);
-                createCardColumn.setAttribute('status', `${dataHandler.camelize(card.status_id)}`)
-                createColumnTitle.setAttribute('class', 'card-column-title text-center border-bottom border-dark mb-2');
-                createColumnTitle.innerText = `${card.status_id}`;
-                createCardColumn.appendChild(createColumnTitle);
-                board.appendChild(createCardColumn);
-            }
-            let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
-            let cardToAdd = `
-                        <div id="${card.id}" draggable="true" class="${dataHandler.camelize(card.status_id)}" card="true">
-                            ${card.title}
-                        </div>
-                    `;
-            cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
-        }
-
-        this.createDropZone();
-    },
 
     showCards: function (cards) {
         // shows the cards of a board
@@ -218,38 +209,12 @@ export let dom = {
         for (let card of cards) {
             let board = document.querySelector(`#board${card.board_id}`);
             if (`board${card.board_id}` == `${board.id}`) {
-                if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
-                    let createCardColumn = document.createElement('div');
-                    let createColumnTitle = document.createElement('div');
-                    createCardColumn.setAttribute('class', `col border border-dark p-0 ${dataHandler.camelize(card.status_id)}${card.board_id}`);
-                    createCardColumn.setAttribute('status', `${dataHandler.camelize(card.status_id)}`)
-                    createColumnTitle.setAttribute('class', 'card-column-title text-center border-bottom border-dark mb-2');
-                    createColumnTitle.innerText = `${card.status_id}`;
-                    createCardColumn.appendChild(createColumnTitle);
-                    board.appendChild(createCardColumn);
-                    createColumnTitle.addEventListener("click", function () {
-                        let oldName = `${card.status_id}`;
-                        let columnTitle = `${card.status_id}`;
-                        let addName = `
-                                <form>
-                                <input type="text" name="title" placeholder="${columnTitle}" value="${columnTitle}">
-                                <input type="submit" id="new-board-name-submit" value="Save">
-                                </form>
-                                `
-                        createColumnTitle.insertAdjacentHTML("afterend", addName);
-                        let form = document.querySelector('form')
-                        form.addEventListener('submit', event => {
-                            const formData = new FormData(event.target)
-                            dataHandler.renameColumn(oldName, formData.get('title'));
-                        })
-                    });
-                }
                 let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
                 let cardToAdd = `
-                        <div id="${card.id}" draggable="true" class="${dataHandler.camelize(card.status_id)}" card="true">
-                            ${card.title}
-                        </div>
-                    `;
+                    <div id="${card.id}" draggable="true" class="card mx-0 mb-2 border border-dark text-center ${dataHandler.camelize(card.status_id)}" card="true">
+                        ${card.title}
+                    </div>
+                `;
                 cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
             }
         }
@@ -279,8 +244,7 @@ export let dom = {
             card.addEventListener('dragstart', event => {
                 event.dataTransfer.setData("text/plain", card.id);
             });
-        }
-
+        };
         dom.setUpDropZone(dropZone);
 
     },
@@ -312,6 +276,67 @@ export let dom = {
         });
     },
     // here comes more features
+    removeAllBoardElements: function () {
+        let allBoards = document.querySelector('#boards');
+        if (allBoards) {
+            allBoards.innerHTML = '';
+        }
+    },
+    initAddColumn: function (event) {
+        let boardSection = event.target.parentNode.parentNode;
+        if (boardSection.tagName === 'SECTION' && boardSection.classList.contains('board')) {
+            document.querySelector('#submitModalTitle').innerText = 'Add new column';
+            document.querySelector('#submitModalInputPrepend').innerText = 'Column name:';
+            document.querySelector('#submitModalInput').value = '';
+            let submitModal = document.querySelector('#submitModal');
+            submitModal.dataset.boardId = event.target.dataset.boardId;
+            submitModal.dataset.submitAction = event.target.dataset.submitAction;
+        }
+    },
+    initModalSubmit: function () {
+        document.querySelector('#modalSubmitButton').addEventListener('click', () => {
+            let submitModal = document.querySelector('#submitModal')
+            if (submitModal.querySelector('#submitModalInput').value) {
+                if (submitModal.dataset.submitAction === "addColumn") {
+                    let boardId = submitModal.dataset.boardId;
+                    let columnTitle = submitModal.querySelector('#submitModalInput').value;
+                    dataHandler.createNewColumn(columnTitle, boardId, (data) => {
+                        this.addNewColumn(boardId, data.columnTitle);
+                    });
+                }
+            }
+        })
+    },
+    addNewColumn: function (boardId, columnTitle) {
+        let board = document.querySelector(`#board${boardId}`);
+        let newColumn = `
+        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}">
+            <div class="'card-column-title text-center border-bottom border-dark mb-2'">${columnTitle}</div>
+        </div>
+        `
+        board.insertAdjacentHTML('beforeend', newColumn);
+    },
+    initColumnTitleRename: function () {
+        let columnTitles = document.querySelectorAll('.card-column-title');
+            for (let colTitle of columnTitles) {
+                colTitle.addEventListener("click", function () {
+                    let oldName = `${colTitle.innerText}`;
+                    let columnTitle = `${colTitle.innerText}`;
+                    let addName = `
+                        <form>
+                        <input type="text" name="title" placeholder="${columnTitle}" value="${columnTitle}">
+                        <input type="submit" id="new-board-name-submit" value="Save">
+                        </form>
+                        `
+                    colTitle.insertAdjacentHTML("afterend", addName);
+                    let form = document.querySelector('form')
+                    form.addEventListener('submit', event => {
+                        const formData = new FormData(event.target)
+                        dataHandler.renameColumn(oldName, formData.get('title'));
+                    })
+                });
+            }
+    },
     setUpDropZone: function (dropZone) {
         for (let zone of dropZone) {
             zone.addEventListener('dragover', event => {

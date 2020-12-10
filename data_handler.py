@@ -9,7 +9,7 @@ def get_card_status(status_id):
     :param status_id:
     :return: str
     """
-    statuses = persistence.get_statuses()
+    statuses = persistence.get_statuses(True)
     return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
 
 
@@ -162,6 +162,7 @@ def get_user_for_login(username, password):
                     if verify_password(password, row[2]):
                         return row
 
+
 def update_cards(card_update_data):
     cards = persistence.get_cards()
     for card in cards:
@@ -173,3 +174,19 @@ def update_cards(card_update_data):
 
 # if __name__ == '__main__':
 #     pass
+
+
+def add_status_to_board(board_id, column_title_json):
+    column_title = column_title_json['columnTitle']
+    boards = persistence.get_boards()
+    if not persistence.check_if_status_exists(column_title):
+        status_id = str(int(persistence.get_highest_id('./data/statuses.csv')) + 1)
+        persistence.append_row({'id' : status_id,
+                                'title' : column_title},
+                               './data/statuses.csv')
+    else:
+        status_id = persistence.get_status_id(column_title)
+    for board in boards:
+        if int(board['id']) == int(board_id):
+            board['board_statuses'] += f',{status_id}'
+    persistence._write_csv('./data/boards.csv', 'boards', boards)
