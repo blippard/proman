@@ -78,6 +78,7 @@ export let dom = {
                         const formSheet = document.querySelector('form');
                         dataHandler.createNewCard(formData.get('title'), boardId, formData.get('status'));
                         formSheet.remove();
+                        dom.loadLatestCards(boardId);
                     })
             })
         }
@@ -89,6 +90,39 @@ export let dom = {
             dom.showCards(cards);
         })
     },
+    loadLatestCards: function (boardId) {
+        // retrieves cards and makes showCards called
+        dataHandler.getLatestCardsByBoardId(boardId,function(cards){
+            dom.showCard(cards);
+        })
+    },
+    showCard: function (card) {
+        // shows the cards of a board
+        // it adds necessary event listeners also
+            let board = document.querySelector(`#board${card.board_id}`);
+            if (`board${card.board_id}` == `${board.id}`) {
+                if (!board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`)) {
+                    let createCardColumn = document.createElement('div');
+                    let createColumnTitle = document.createElement('div');
+                    createCardColumn.setAttribute('class', `col border border-dark p-0 ${dataHandler.camelize(card.status_id)}${card.board_id}`);
+                    createCardColumn.setAttribute('status', `${dataHandler.camelize(card.status_id)}`)
+                    createColumnTitle.setAttribute('class', 'card-column-title text-center border-bottom border-dark mb-2');
+                    createColumnTitle.innerText = `${card.status_id}`;
+                    createCardColumn.appendChild(createColumnTitle);
+                    board.appendChild(createCardColumn);
+                }
+                let cardColumn = board.querySelector(`.${dataHandler.camelize(card.status_id)}${card.board_id}`);
+                let cardToAdd = `
+                    <div id="${card.id}" draggable="true" class="${dataHandler.camelize(card.status_id)}" card="true">
+                        ${card.title}
+                    </div>
+                `;
+                cardColumn.insertAdjacentHTML('beforeend', cardToAdd);
+            }
+        
+        this.createDropZone();
+    },
+
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
