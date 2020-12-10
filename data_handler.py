@@ -9,7 +9,7 @@ def get_card_status(status_id):
     :param status_id:
     :return: str
     """
-    statuses = persistence.get_statuses()
+    statuses = persistence.get_statuses(True)
     return next((status['title'] for status in statuses if status['id'] == str(status_id)), 'Unknown')
 
 

@@ -104,7 +104,7 @@ export let dom = {
                 <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}">
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
-                        <button class="btn btn-dark add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
+                        <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
                         <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}"></button>
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
                         <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">Rename Board</button>
