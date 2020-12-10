@@ -17,33 +17,35 @@
 
 </head>
 <body>
-<canvas id="snow"></canvas>
+    <canvas id="snow"></canvas>
 
-<div class="center" id="contents">
-    <div class="text-center">
-        <img id="santa4" class="santas" src="/static/css/images/santa4.gif" alt="santa4">
-        <img id="santa3" class="santas" src="/static/css/images/santa3.gif" alt="santa3">
-        <p><span id="home" style="font-size: 43px">    ProMan</span>
-            <img id="audio" style="height: 20px; width:20px;" src="/static/css/images/audio.png" alt="audio">
-            <br><span style="font-size: 28px">Christmas Edition</span>
-            <br><span class="team" style="font-size: 13px">by 40 dkg greenpeas</span></p>
-        <img id="santa1" class="santas" src="/static/css/images/santa1.gif" alt="santa1">
-        <img id="santa2" class="santas" src="/static/css/images/santa2.gif" alt="santa2">
+    <div class="center" id="contents">
+        <div class="text-center">
+            <img id="santa4" class="santas" src="/static/css/images/santa4.gif" alt="santa4">
+            <img id="santa3" class="santas" src="/static/css/images/santa3.gif" alt="santa3">
+            <p><span id="home" style="font-size: 43px">ProMan</span>
+                <img id="audio" style="height: 20px; width:20px;" src="/static/css/images/audio.png" alt="audio">
+                <br><span style="font-size: 28px">Christmas Edition</span>
+                <br><span class="team" style="font-size: 13px">by 40 dkg greenpeas</span></p>
+            <img id="santa1" class="santas" src="/static/css/images/santa1.gif" alt="santa1">
+            <img id="santa2" class="santas" src="/static/css/images/santa2.gif" alt="santa2">
+            <br>
+            <button id="login-button" class="mc-button log-button">
+                Login
+            </button>
+            <button id="registration-button" class="mc-button log-button">
+                Register
+            </button>
+            <button class="mc-button log-button">
+                Logout
+            </button>
+            <button class="add-board-btn mc-button log-button">
+                Add Board
+            </button>
+        </div>
+
         <br>
-        <button id="login-button" class="mc-button log-button">
-            Login
-        </button>
-        <button id="registration-button" class="mc-button log-button">
-            Register
-        </button>
-        <button class="mc-button log-button">
-            Logout
-        </button>
-        <button class="add-board-btn mc-button log-button">
-            Add Board
-        </button>
-    </div>
-
+        <div class="panel" id="boards"></div>
     <br>
     <div class="panel" id="boards"></div>
         <!-- Modal -->
@@ -74,38 +76,38 @@
         </div>
 
 
-    <div id="registration-container">
-        <form class="registration">
-            <h2>Registration</h2>
-            <label for="username">Username:</label>
-            <input type="text" id="username">
-            <label for="password">Password:</label>
-            <input type="password" id="password">
-            <label for="password">Confirm password:</label>
-            <input type="password" id="confirm_password">
-            <input id="reg-button" type="button" value="Register">
-        </form>
+        <div id="registration-container">
+            <form class="registration">
+                <h2>Registration</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="username">
+                <label for="password">Password:</label>
+                <input type="password" id="password">
+                <label for="password">Confirm password:</label>
+                <input type="password" id="confirm_password">
+                <input id="reg-button" type="button" value="Register">
+            </form>
+        </div>
+        <div id="login-container">
+            <form class="login">
+                <h2>Login</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="login-username">
+                <label for="password">Password:</label>
+                <input type="password" id="login-password">
+                <input id="login-submit-button" type="button" value="Login">
+            </form>
+        </div>
     </div>
-    <div id="login-container">
-        <form class="login">
-            <h2>Login</h2>
-            <label for="username">Username:</label>
-            <input type="text" id="login-username">
-            <label for="password">Password:</label>
-            <input type="password" id="login-password">
-            <input id="login-submit-button" type="button" value="Login">
-        </form>
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
 
 </body>
 </html>
