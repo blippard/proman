@@ -65,6 +65,7 @@ export let dom = {
         });
         this.initManualSync();
         this.initAutoSync();
+        this.initAutoSyncToggle();
     },
     postdata: async function (url = '', data) {
         const response = await fetch(url, {
@@ -413,7 +414,22 @@ export let dom = {
     },
     initAutoSync: function () {
         setInterval(() => {
-            this.loadBoards(true);
+            if (document.querySelector('.auto-sync-toggle').dataset['toggle'] === 'on') {
+                console.log('test');
+                this.loadBoards(true);
+            }
         }, 5000)
     },
+    initAutoSyncToggle: function () {
+        let toggleBtn = document.querySelector('.auto-sync-toggle');
+        toggleBtn.addEventListener('click', () => {
+            if (toggleBtn.dataset['toggle'] === 'off') {
+                toggleBtn.dataset['toggle'] = 'on';
+                toggleBtn.innerText = 'Auto-sync: On';
+            } else {
+                toggleBtn.dataset['toggle'] = 'off';
+                toggleBtn.innerText = 'Auto-sync: Off';
+            }
+        })
+    }
 };

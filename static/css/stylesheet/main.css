@@ -295,3 +295,9 @@ input {}
     padding-bottom: 2px;
     font-size: 20px;
 }
+.auto-sync-toggle {
+    height: 37px;
+    font-family: 'Minecraftia', cursive;
+    font-size: 14px;
+    cursor: url(../images/cursor.cur), default;
+}
