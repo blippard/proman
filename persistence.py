@@ -28,10 +28,10 @@ def _write_csv(file_name, data_type, list_of_dict):
     """
     Overwrites the content of a .csv file with provided data (a non-empty list)
     :param file_name: relative path to file
-    :param data_type: a key ('boards', 'statuses') to help determine the
+    :param data_type: a key ('boards', 'statuses') to help determine the 
       header for the .csv (this is a canonical order for the keys in the dicts
       Each dict could have its keys sorted differently - by insertion order -)
-    :param list_of_dict: list of dictionaries (each dictionary
+    :param list_of_dict: list of dictionaries (each dictionary 
       is a row in the .csv) -> function assumes all dicts
       have the same keys and these correspond to the headers of given data_type
     """
@@ -46,22 +46,10 @@ def _write_csv(file_name, data_type, list_of_dict):
             else:
                 print('Wrong data type!')
                 return
+                
             writer = csv.DictWriter(csvfile, fieldnames=my_fieldnames)
             writer.writeheader()    # writes the first row of the .csv (the keys in my_fieldnames)
             writer.writerows(list_of_dict)
-
-
-def _get_data(data_type, file, force):
-    """
-    Reads defined type of data from file or cache
-    :param data_type: key where the data is stored in cache
-    :param file: relative path to data file
-    :param force: if set to True, cache will be ignored
-    :return: OrderedDict
-    """
-    if force or data_type not in _cache:
-        _cache[data_type] = _read_csv(file)
-    return _cache[data_type]
 
 
 def get_highest_id(file_name):
@@ -111,7 +99,7 @@ def _append_csv(file_name, data_type, row):
     """
     Appends the content of a .csv file with a single row (a dict)
     :param file_name: relative path to file
-    :param data_type: a key ('boards', 'statuses' etc.) to help determine the
+    :param data_type: a key ('boards', 'statuses' etc.) to help determine the 
       header for the .csv (the canonical order of keys)
     :param row: a SINGLE dictionary with keys the sames as header for data_type
     """
@@ -125,13 +113,26 @@ def _append_csv(file_name, data_type, row):
         else:
             print('Wrong data type!')
             return
-
+        
         # turn the dictionary into a sorted list of values corresponding to the canonical
         # ordering of the dictionary keys [this order is given by the header (my_fieldnames)]
-        values_list = [row[field] if field in row else "" for field in my_fieldnames]
+        values_list = [ row[field] if field in row else "" for field in my_fieldnames ]
 
-        writer = csv.writer(csvfile)
+        writer = csv.writer(csvfile, quotechar='"')
         writer.writerow(values_list)
+
+
+def _get_data(data_type, file, force):
+    """
+    Reads defined type of data from file or cache
+    :param data_type: key where the data is stored in cache
+    :param file: relative path to data file
+    :param force: if set to True, cache will be ignored
+    :return: OrderedDict
+    """
+    if force or data_type not in _cache:
+        _cache[data_type] = _read_csv(file)
+    return _cache[data_type]
 
 
 def get_data_from_csv(filename):
@@ -206,6 +207,14 @@ def rename_board(id, new_name):
 
 def rename_column(old_name, new_name):
     _edit_status_csv(STATUSES_FILE, old_name, new_name)
+
+
+def write_boards(list_of_dict):
+    _write_csv(BOARDS_FILE, 'boards', list_of_dict)
+
+
+def write_cards(list_of_dict):
+    _write_csv(CARDS_FILE, 'cards', list_of_dict)
 
 # NOT YET
 # def rename_card(card_id, new_name):
