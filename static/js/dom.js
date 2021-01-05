@@ -369,15 +369,15 @@ export let dom = {
                 let droppedElementId = event.dataTransfer.getData("text/plain");
                 let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
                 zone.appendChild(droppedElement);
-                    if (zoneStatus == 'new') {
-                        this.setCardStatus(droppedElement,droppedElementId,'new','0');
-                    } else if (zoneStatus == 'inProgress') {
-                        this.setCardStatus(droppedElement,droppedElementId,'inProgress','1');
-                    } else if (zoneStatus == 'testing') {
-                        this.setCardStatus(droppedElement,droppedElementId,'testing','2');
-                    } else if (zoneStatus == 'done') {
-                        this.setCardStatus(droppedElement,droppedElementId,'done','3');
-                    }
+                if (zoneStatus == 'new') {
+                    this.setCardStatus(droppedElement,droppedElementId,'new','0');
+                } else if (zoneStatus == 'inProgress') {
+                    this.setCardStatus(droppedElement,droppedElementId,'inProgress','1');
+                } else if (zoneStatus == 'testing') {
+                    this.setCardStatus(droppedElement,droppedElementId,'testing','2');
+                } else if (zoneStatus == 'done') {
+                    this.setCardStatus(droppedElement,droppedElementId,'done','3');
+                }
                 });
             }
         },
