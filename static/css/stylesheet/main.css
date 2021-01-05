@@ -13,6 +13,7 @@
 
 html, body, .button, .log-button, .board-header {
     cursor: url(../images/cursor.cur), default;
+
 }
 
 body, html {
@@ -50,6 +51,9 @@ section.board {
     background: #999 url('https://i.ibb.co/rb2TWXL/bgbtn.png');
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
     padding-bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .board-title {
@@ -191,7 +195,6 @@ canvas {
     text-align: center;
     top: -3px;
     height: 37px;
-    width: 180px;
     font-family: 'Minecraftia', cursive;
     font-size: 16px;
     cursor: url(../images/cursor.cur), default;
@@ -221,7 +224,6 @@ canvas {
 
 .log-button {
     height: 37px;
-    width: 110px;
     font-family: 'Minecraftia', cursive;
     font-size: 14px;
     cursor: url(../images/cursor.cur), default;
@@ -302,4 +304,8 @@ input {}
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
     padding-bottom: 2px;
     font-size: 20px;
+}
+
+.collapse-button {
+    order: 5;
 }

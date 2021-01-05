@@ -7,11 +7,15 @@ export let dom = {
         let registrationButton = document.getElementById('registration-button');
         let loginButton = document.getElementById('login-button');
         let logoutButton = document.getElementById('logout-button');
+        let addPrivateBoardButton = document.querySelector('.add-private-board-btn')
         let registerSubmit = document.getElementById('reg-button');
         let loginSubmit = document.getElementById('login-submit-button');
         let boards = document.getElementById('boards');
         let registrationContainer = document.getElementById('registration-container');
         let loginContainer = document.getElementById('login-container');
+        if (!sessionStorage.getItem('user-id')) {
+            addPrivateBoardButton.style.display = 'none';
+        }
         homeButton.addEventListener('click', () => {
             registrationContainer.style.display = 'none';
             loginContainer.style.display = 'none';
@@ -28,6 +32,9 @@ export let dom = {
             boards.style.display = 'none';
         });
         logoutButton.addEventListener('click', () => {
+            sessionStorage.removeItem("userId");
+        })
+        addPrivateBoardButton.addEventListener('click', () => {
             sessionStorage.removeItem("userId");
         })
         registerSubmit.addEventListener('click', () => {
@@ -60,6 +67,7 @@ export let dom = {
                     sessionStorage.setItem("userId", response);
                     loginContainer.style.display = 'none';
                     boards.style.display = 'block';
+                    addPrivateBoardButton.style.display = 'inline-block';
                 }
             })
         })
@@ -111,7 +119,7 @@ export let dom = {
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
                         <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
-                        <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                        <button class="btn btn-dark float-right collapse-button" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
                             &#x2304
                         </button>
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
