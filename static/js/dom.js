@@ -79,15 +79,26 @@ export let dom = {
     loadBoards: function (sync=false, init=false) {
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
-            if (sync === false || JSON.stringify(syncCache['boards']) !== JSON.stringify(boards)) {
-                    if (init === false) {
-                        dom.removeAllBoardElements();
+            let iterations = boards.length;
+            let cardDiff = false;
+            for (let board of boards) {
+                dataHandler.getCardsByBoardId(board.id, function (card) {
+                    if (JSON.stringify(syncCache[`board${board.id}cards`]) !== JSON.stringify(card)){
+                        cardDiff = true;
                     }
-                    syncCache['boards'] = boards;
-                    dom.showBoards(boards);
-                    for (let board of boards) {
-                        dom.loadCards(board.id);
+                    if (!--iterations) {
+                        if (sync === false || JSON.stringify(syncCache['boards']) !== JSON.stringify(boards) || cardDiff === true) {
+                            if (init === false) {
+                                dom.removeAllBoardElements();
+                            }
+                            syncCache['boards'] = boards;
+                            dom.showBoards(boards);
+                            for (let board of boards) {
+                                dom.loadCards(board.id);
+                            }
                     }
+                    }
+                })
             }
         })
     },
@@ -199,6 +210,7 @@ export let dom = {
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, function (cards) {
+            syncCache[`board${boardId}cards`] = cards;
             dom.showCards(cards);
         })
     },
