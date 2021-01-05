@@ -133,6 +133,7 @@ def login():
 @json_response
 def update_card():
     posted_data = request.json
+    print(posted_data)
     if "id" in posted_data:
         data_handler.update_cards(posted_data)
     else:

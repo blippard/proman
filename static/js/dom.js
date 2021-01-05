@@ -95,7 +95,7 @@ export let dom = {
             let columnlist = '';
             for (let column of board.board_statuses){
                 columnlist += `
-                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}">
+                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}" status="${dataHandler.camelize(column)}">
                     <div class="card-column-title text-center border-bottom border-dark mb-2">${column}</div>
                 </div>
                 `
@@ -236,18 +236,6 @@ export let dom = {
             });
         }
     },
-    createDropZone: function () {
-        let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
-        let cards = document.querySelectorAll('div[card="true"]');
-
-        for (let card of cards) {
-            card.addEventListener('dragstart', event => {
-                event.dataTransfer.setData("text/plain", card.id);
-            });
-        };
-        dom.setUpDropZone(dropZone);
-
-    },
     createNewChildBoard: function (board) {
         const boardInnerContainer = document.querySelector(".board-container");
         let childHTMLText = `
@@ -310,7 +298,7 @@ export let dom = {
     addNewColumn: function (boardId, columnTitle) {
         let board = document.querySelector(`#board${boardId}`);
         let newColumn = `
-        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}">
+        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}" status="${dataHandler.camelize(columnTitle)}">
             <div class="'card-column-title text-center border-bottom border-dark mb-2'">${columnTitle}</div>
         </div>
         `
@@ -337,49 +325,57 @@ export let dom = {
                 });
             }
     },
+    createDropZone: function () {
+        let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
+        let cards = document.querySelectorAll('div[card="true"]');
+        for (let card of cards) {
+            card.addEventListener('dragstart', (event) => {
+                event.dataTransfer.setData("text/plain", card.id);
+            });
+        };
+        dom.setUpDropZone(dropZone);
+    },
     setUpDropZone: function (dropZone) {
         for (let zone of dropZone) {
             zone.addEventListener('dragover', event => {
                 event.preventDefault();
             })
         }
-
-
-
         for (let zone of dropZone) {
             zone.addEventListener('drop', event => {
                 let zoneStatus = zone.getAttribute('status');
                 let droppedElementId = event.dataTransfer.getData("text/plain");
                 let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
                 zone.appendChild(droppedElement);
-
+                console.log(zone);
+                let postData;
                     if (zoneStatus == 'new') {
-                        droppedElement.setAttribute('class', 'new');
-                        let postData = {'id': droppedElementId, 'status': '0'};
-                        console.log(postData);
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center new');
+                        postData = {'id': droppedElementId, 'status': '0'};
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
+                        console.log(zoneStatus);
                         })
                     } else if (zoneStatus == 'inProgress') {
-                        droppedElement.setAttribute('class', 'inProgress');
-                        let postData = {'id': droppedElementId, 'status': '1'};
-                        console.log(postData);
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center inProgress');
+                        postData = {'id': droppedElementId, 'status': '1'};
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
+                        console.log(zoneStatus);
                         })
                     } else if (zoneStatus == 'testing') {
-                        droppedElement.setAttribute('class', 'testing');
-                        let postData = {'id': droppedElementId, 'status': '2'};
-                        console.log(postData);
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center testing');
+                        postData = {'id': droppedElementId, 'status': '2'};
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
+                        console.log(zoneStatus);
                         })
                     } else if (zoneStatus == 'done') {
-                        droppedElement.setAttribute('class', 'done');
-                        let postData = {'id': droppedElementId, 'status': '3'};
-                        console.log(postData);
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center done');
+                        postData = {'id': droppedElementId, 'status': '3'};
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
+                        console.log(zoneStatus);
                         })
                     }
 
