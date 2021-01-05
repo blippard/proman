@@ -302,7 +302,7 @@ input {}
     flex-direction: column;
 }
 
-#login-password, #confirm_password {
+#login-password, #confirm_password, #private-board-name {
     margin-bottom: 10px
 }
 
