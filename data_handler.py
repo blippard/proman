@@ -61,12 +61,13 @@ def get_new_id_for_cards():
 def create_new_card(card_data):
     order = 0
     cards_dictionary = {'id': get_new_id_for_cards(),
-                'board_id': card_data['board_id'],
-                'title': card_data['title'],
-                'status_id': card_data['status_id'],
-                'order': order
-                }
+                        'board_id': card_data['board_id'],
+                        'title': card_data['title'],
+                        'status_id': card_data['status_id'],
+                        'order': order
+                        }
     persistence.append_cards(cards_dictionary)
+    return cards_dictionary
 
 
 def get_new_id_for_boards():
@@ -78,7 +79,7 @@ def get_new_id_for_boards():
     id_list = []
     for board in all_boards:
         try:
-           new_id = int(board['id'])
+            new_id = int(board['id'])
         except (ValueError, TypeError):
             pass
         else:
@@ -97,15 +98,13 @@ def createback_new_board(title):
 def rename_board(board_data):
     id = board_data['board_id']
     new_title = board_data['title']
-    persistence.rename_board(id, new_title)
-    return row_dict
+    persistence.rename_board(id, new_title)    
 
 
 def rename_column(column_data):
     old_name = column_data['old-name']
     new_title = column_data['title']
-    persistence.rename_column(old_name, new_title)
-    return row_dict
+    persistence.rename_column(old_name, new_title)    
 
 
 # # NOT YET
@@ -172,9 +171,34 @@ def update_cards(card_update_data):
     all_cards_list.insert(0, persistence.CARDS_HEADER)
     persistence.overwrite_csv(persistence.CARDS_FILE, all_cards_list)
 
-# if __name__ == '__main__':
-#     pass
 
+def pop_from_list_board(board_id, force=False):
+    all_boards = persistence.get_boards(force=True)
+    id_list = [row["id"] for row in all_boards]
+    try:
+        the_index = id_list.index(str(board_id))
+    except (TypeError, ValueError):
+        raise
+    
+    del id_list
+    if force:        
+        # we just delete from boards DB and not from other DBs
+        pass
+    else:        
+        remove_all_cards_of_board(board_id)
+
+    row_dict = all_boards.pop(the_index)    
+    persistence.write_boards(all_boards)
+
+    return row_dict
+
+
+def remove_all_cards_of_board(board_id):
+    all_cards = persistence.get_cards(force=True)    
+    new_cards = [row for row in all_cards if row["board_id"] != str(board_id)]
+    del all_cards
+    persistence.write_cards(new_cards)
+            
 
 def add_status_to_board(board_id, column_title_json):
     column_title = column_title_json['columnTitle']

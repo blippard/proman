@@ -4,10 +4,10 @@
 // (watch out: when you would like to use a property/function of an object from the
 // object itself then you must use the 'this' keyword before. For example: 'this._data' below)
 export let dataHandler = {
-    _data: {}, // it is a "cache for all data received: boards, cards and statuses. It is not accessed from outside.
-    _api_get: function (url, callback) {
-        // it is not called from outside
-        // loads data from API, parses it and calls the callback with it
+  _data: {}, // it is a "cache for all data received: boards, cards and statuses. It is not accessed from outside.
+  _api_get: function (url, callback) {
+    // it is not called from outside
+    // loads data from API, parses it and calls the callback with it
 
         fetch(url, {
             method: 'GET',
@@ -79,8 +79,8 @@ export let dataHandler = {
             }
             callback(jsonResponse);
         }); //callback will act on response.json(),
-        //                                                  // not on response
-    },
+            // not on response
+      },
     createNewCard: function (cardTitle, boardId, statusId, callback) {
         // creates new card, saves it and calls the callback function with its data
         let newCardPostData = {'title': cardTitle, 'board_id': boardId, 'status_id': statusId}
@@ -113,6 +113,18 @@ export let dataHandler = {
     //     })
     // },
     // here comes more features
+    deleteBoard: function (boardId, callback) {
+        // credentials should be provided in JSON post data, but later
+        let postData = {'id': boardId}
+        this._api_post(`/delete-board/${boardId}`, postData, (jsonResponse) => {
+            if (jsonResponse.id) {
+                let indexToDel = this._data["boards"].indexOf(jsonResponse)
+                this._data["boards"].splice(indexToDel, 1);
+            }
+            callback(jsonResponse)
+        })
+    },
+
     camelize: function (str) {
         return str.replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
             return index === 0 ? word.toLowerCase() : word.toUpperCase();
