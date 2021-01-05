@@ -370,33 +370,24 @@ export let dom = {
                 let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
                 zone.appendChild(droppedElement);
                     if (zoneStatus == 'new') {
-                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center new');
-                        let postData = {'id': droppedElementId, 'status': '0'};
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'new','0');
                     } else if (zoneStatus == 'inProgress') {
-                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center inProgress');
-                        let postData = {'id': droppedElementId, 'status': '1'};
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'inProgress','1');
                     } else if (zoneStatus == 'testing') {
-                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center testing');
-                        let postData = {'id': droppedElementId, 'status': '2'};
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'testing','2');
                     } else if (zoneStatus == 'done') {
-                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center done');
-                        let postData = {'id': droppedElementId, 'status': '3'};
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'done','3');
                     }
                 });
             }
         },
+    setCardStatus: function (droppedElement, droppedElementId, statusName, statusId) {
+        droppedElement.setAttribute('class', `card mx-0 mb-2 border border-dark text-center ${statusName}`);
+        let postData = {'id': droppedElementId, 'status': statusId};
+        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+        dataHandler._data["cards"].push(jsonResponse);
+        })
+    },
     initManualSync: function () {
         let syncButton = document.querySelector('.sync-button');
         syncButton.addEventListener('click', () => {
