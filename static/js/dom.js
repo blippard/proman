@@ -114,7 +114,7 @@ export let dom = {
             let columnlist = '';
             for (let column of board.board_statuses){
                 columnlist += `
-                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}">
+                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}" status="${dataHandler.camelize(column)}">
                     <div class="card-column-title text-center border-bottom border-dark mb-2">${column}</div>
                 </div>
                 `
@@ -330,7 +330,7 @@ export let dom = {
     addNewColumn: function (boardId, columnTitle) {
         let board = document.querySelector(`#board${boardId}`);
         let newColumn = `
-        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}">
+        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}" status="${dataHandler.camelize(columnTitle)}">
             <div class="'card-column-title text-center border-bottom border-dark mb-2'">${columnTitle}</div>
         </div>
         `
@@ -363,46 +363,37 @@ export let dom = {
                 event.preventDefault();
             })
         }
-
-
-
         for (let zone of dropZone) {
             zone.addEventListener('drop', event => {
                 let zoneStatus = zone.getAttribute('status');
                 let droppedElementId = event.dataTransfer.getData("text/plain");
                 let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
                 zone.appendChild(droppedElement);
-
                     if (zoneStatus == 'new') {
-                        droppedElement.setAttribute('class', 'new');
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center new');
                         let postData = {'id': droppedElementId, 'status': '0'};
-                        console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     } else if (zoneStatus == 'inProgress') {
-                        droppedElement.setAttribute('class', 'inProgress');
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center inProgress');
                         let postData = {'id': droppedElementId, 'status': '1'};
-                        console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     } else if (zoneStatus == 'testing') {
-                        droppedElement.setAttribute('class', 'testing');
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center testing');
                         let postData = {'id': droppedElementId, 'status': '2'};
-                        console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     } else if (zoneStatus == 'done') {
-                        droppedElement.setAttribute('class', 'done');
+                        droppedElement.setAttribute('class', 'card mx-0 mb-2 border border-dark text-center done');
                         let postData = {'id': droppedElementId, 'status': '3'};
-                        console.log(postData);
                         dataHandler._api_post('/update-card', postData, (jsonResponse) => {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     }
-
                 });
             }
         },
