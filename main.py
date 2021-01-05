@@ -160,7 +160,7 @@ def login():
     password = request.json['password']
     user = data_handler.get_user_for_login(username, password)
     if user:
-        return user[0]
+        return user['id']
     else:
         return 'Failure'
 
