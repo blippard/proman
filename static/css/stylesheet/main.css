@@ -126,8 +126,9 @@ section.board {
 /* Snow in the background */
 .center {
     position: absolute;
+    box-sizing: border-box;
     width: 100%;
-    height: 100%;
+    height: 99%;
     left: 0;
     right: 0;
     color: #e8e8e8;
@@ -288,8 +289,13 @@ input {}
     justify-content: center;
 }
 
+.private-board-container {
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
 
-.registration, .login {
+.registration, .login, .add-private-board{
     display: flex;
     justify-content: center;
     align-items: center;

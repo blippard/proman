@@ -12,6 +12,7 @@ export let dom = {
         let loginSubmit = document.getElementById('login-submit-button');
         let boards = document.getElementById('boards');
         let registrationContainer = document.getElementById('registration-container');
+        let addPrivateBoardContainer = document.querySelector('.private-board-container')
         let loginContainer = document.getElementById('login-container');
         if (!sessionStorage.getItem('user-id')) {
             addPrivateBoardButton.style.display = 'none';
@@ -20,11 +21,13 @@ export let dom = {
             registrationContainer.style.display = 'none';
             loginContainer.style.display = 'none';
             boards.style.display = 'block';
+            addPrivateBoardContainer.style.display = 'none';
         })
         registrationButton.addEventListener('click', () => {
             registrationContainer.style.display = 'flex';
             loginContainer.style.display = 'none';
             boards.style.display = 'none';
+            addPrivateBoardContainer.style.display = 'none';
         });
         loginButton.addEventListener('click', () => {
             loginContainer.style.display = 'flex';
@@ -35,7 +38,10 @@ export let dom = {
             sessionStorage.removeItem("userId");
         })
         addPrivateBoardButton.addEventListener('click', () => {
-            sessionStorage.removeItem("userId");
+            addPrivateBoardContainer.style.display = 'flex';
+            registrationContainer.style.display = 'none';
+            loginContainer.style.display = 'none';
+            boards.style.display = 'none';
         })
         registerSubmit.addEventListener('click', () => {
             let username = document.getElementById('username');
