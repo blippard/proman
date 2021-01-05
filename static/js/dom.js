@@ -5,8 +5,9 @@ export let dom = {
     init: function () {
         let homeButton = document.getElementById('home');
         let registrationButton = document.getElementById('registration-button');
-        let registerSubmit = document.getElementById('reg-button');
         let loginButton = document.getElementById('login-button');
+        let logoutButton = document.getElementById('logout-button');
+        let registerSubmit = document.getElementById('reg-button');
         let loginSubmit = document.getElementById('login-submit-button');
         let boards = document.getElementById('boards');
         let registrationContainer = document.getElementById('registration-container');
@@ -18,12 +19,17 @@ export let dom = {
         })
         registrationButton.addEventListener('click', () => {
             registrationContainer.style.display = 'flex';
+            loginContainer.style.display = 'none';
             boards.style.display = 'none';
         });
         loginButton.addEventListener('click', () => {
             loginContainer.style.display = 'flex';
+            registrationContainer.style.display = 'none';
             boards.style.display = 'none';
         });
+        logoutButton.addEventListener('click', () => {
+            sessionStorage.removeItem("userId");
+        })
         registerSubmit.addEventListener('click', () => {
             let username = document.getElementById('username');
             let password = document.getElementById('password');
