@@ -1,6 +1,6 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler} from "./data_handler.js";
-
+let syncCache = {};
 export let dom = {
     init: function () {
         let homeButton = document.getElementById('home');
@@ -76,15 +76,20 @@ export let dom = {
         )
         return response.json()
     },
-    loadBoards: function () {
+    loadBoards: function (sync=false, init=false) {
         // retrieves boards and makes showBoards called
-        this.removeAllBoardElements();
         dataHandler.getBoards(function(boards){
-            dom.showBoards(boards);
-            for (let board of boards) {
-                dom.loadCards(board.id);
+            if (sync === false || JSON.stringify(syncCache['boards']) !== JSON.stringify(boards)) {
+                    if (init === false) {
+                        dom.removeAllBoardElements();
+                    }
+                    syncCache['boards'] = boards;
+                    dom.showBoards(boards);
+                    for (let board of boards) {
+                        dom.loadCards(board.id);
+                    }
             }
-        });
+        })
     },
     showBoards: function (boards) {
         // shows boards appending them to #boards div
@@ -390,7 +395,7 @@ export let dom = {
     initManualSync: function () {
         let syncButton = document.querySelector('.sync-button');
         syncButton.addEventListener('click', () => {
-            this.loadBoards();
+            this.loadBoards(true);
         })
     },
 };
