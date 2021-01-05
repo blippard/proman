@@ -63,6 +63,7 @@ export let dom = {
         newBoardBtn.addEventListener("click", (event) => {
             this.handleAddBoardClick(event);
         });
+        this.initManualSync();
     },
     postdata: async function (url = '', data) {
         const response = await fetch(url, {
@@ -386,4 +387,10 @@ export let dom = {
                 });
             }
         },
+    initManualSync: function () {
+        let syncButton = document.querySelector('.sync-button');
+        syncButton.addEventListener('click', () => {
+            this.loadBoards();
+        })
+    },
 };
