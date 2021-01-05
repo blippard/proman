@@ -64,6 +64,7 @@ export let dom = {
             this.handleAddBoardClick(event);
         });
         this.initManualSync();
+        this.initAutoSync();
     },
     postdata: async function (url = '', data) {
         const response = await fetch(url, {
@@ -409,5 +410,10 @@ export let dom = {
         syncButton.addEventListener('click', () => {
             this.loadBoards(true);
         })
+    },
+    initAutoSync: function () {
+        setInterval(() => {
+            this.loadBoards(true);
+        }, 5000)
     },
 };
