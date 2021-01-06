@@ -484,7 +484,6 @@ export let dom = {
     initAutoSync: function () {
         setInterval(() => {
             if (document.querySelector('.auto-sync-toggle').dataset['toggle'] === 'on') {
-                console.log('test');
                 this.loadBoards(true);
             }
         }, 5000)
