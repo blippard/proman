@@ -185,7 +185,7 @@ canvas {
     box-shadow: inset -2px -4px #0006, inset 2px 2px #fff7;
     background: #999 url('https://i.ibb.co/rb2TWXL/bgbtn.png');
     border: 2px solid #000;
-    padding-bottom: 2px;
+    padding-bottom: 6px;
     padding-top: 5px;
     display: inline-block;
     text-align: center;
@@ -196,6 +196,14 @@ canvas {
     font-size: 16px;
     cursor: url(../images/cursor.cur), default;
 
+}
+
+/* Minecraft button that displays differently - element with both classes*/
+.remove-board-btn.mc-button {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
 }
 
 .new-card-btn:hover, .rename-board-btn:hover, .mc-button:hover {
