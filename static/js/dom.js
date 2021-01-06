@@ -230,6 +230,7 @@ export let dom = {
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, function (cards) {
+            syncCache[`board${boardId}cards`] = cards;
             dom.showCards(cards);
         })
     },
