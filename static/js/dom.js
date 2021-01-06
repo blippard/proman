@@ -79,6 +79,7 @@ export let dom = {
         return response.json()
     },
     loadBoards: function (sync=false, init=false) {
+        this.saveShownCollapse();
         // retrieves boards and makes showBoards called
         dataHandler.getBoards(function(boards){
             let iterations = boards.length;
@@ -128,7 +129,7 @@ export let dom = {
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
                         <button class="rename-board-btn" board-id="${board.id}" board-title="${board.title}">Rename Board</button>
                     </div>
-                    <div class="row collapse" id="board${board.id}">
+                    <div class="${syncCache['shownBoards'].includes('board' + board.id) ? 'row collapse show' : 'row collapse'}" id="board${board.id}">
                         ${columnlist}
                     </div>
                 </section>
@@ -431,5 +432,12 @@ export let dom = {
                 toggleBtn.innerText = 'Auto-sync: Off';
             }
         })
+    },
+    saveShownCollapse: function () {
+        let shownBoards = document.querySelectorAll('.row.collapse.show');
+        syncCache['shownBoards'] = [];
+        for (let board of shownBoards) {
+            syncCache['shownBoards'].push(board.id);
+        }
     }
 };
