@@ -14,11 +14,9 @@
     <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
     <script type="module" src="{{ url_for('static', filename='js/design.js') }}" defer></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/stylesheet/main.css') }}">
-
 </head>
 <body>
     <canvas id="snow"></canvas>
-
     <div class="center" id="contents">
         <div class="text-center">
             <img id="santa4" class="santas" src="/static/css/images/santa4.gif" alt="santa4">
@@ -36,11 +34,14 @@
             <button id="registration-button" class="mc-button log-button">
                 Register
             </button>
-            <button class="mc-button log-button">
+            <button id="logout-button" class="mc-button log-button">
                 Logout
             </button>
             <button class="add-board-btn mc-button log-button">
                 Add Board
+            </button>
+            <button class="add-private-board-btn mc-button log-button">
+                Add Private Board
             </button>
             <button class="sync-button mc-button log-button">
                 Sync
@@ -49,7 +50,6 @@
                 Auto-sync: Off
             </button>
         </div>
-
         <br>
         <div class="panel" id="boards"></div>
     <br>
@@ -57,7 +57,6 @@
         <!-- Modal -->
         <div class="modal fade" id="submitModal" role="dialog">
             <div class="modal-dialog">
-
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -80,8 +79,6 @@
 
             </div>
         </div>
-
-
         <div id="registration-container">
             <form class="registration">
                 <h2>Registration</h2>
@@ -102,6 +99,14 @@
                 <label for="password">Password:</label>
                 <input type="password" id="login-password">
                 <input id="login-submit-button" type="button" value="Login">
+            </form>
+        </div>
+        <div class="private-board-container">
+            <form class="add-private-board">
+                <h2>Add Private Board</h2>
+                <label for="private-board-name">Board Name:</label>
+                <input id="private-board-name" type="text">
+                <input id="private-board-submit-button" type="button" value="Add">
             </form>
         </div>
     </div>
