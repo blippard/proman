@@ -47,6 +47,7 @@ export let dataHandler = {
     getBoardStatuses: function (boardId, callback) {
         // the statuses are retrieved and then the callback function is called with the statuses
         this._api_get(`/get-board-statuses/${boardId}`, (response) => {
+            console.log(response);
             callback(response);
         })
     },

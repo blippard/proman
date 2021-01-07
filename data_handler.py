@@ -43,7 +43,8 @@ def get_boards():
 def get_cards_for_board(some_board_id: int):
     
     result = db.get_data_by_kw_value_pair_from_table({'board_id': some_board_id}, 'card')
-    # print(result)
+    for card in result:
+        card['status_id'] = get_card_status(int(card['status_id']))
     return result
 
 
