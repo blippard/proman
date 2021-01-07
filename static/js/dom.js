@@ -101,7 +101,6 @@ export let dom = {
     loadBoards: function (sync=false, init=false) {
         this.saveShownCollapse();
         // retrieves boards and makes showBoards called
-        this.removeAllBoardElements();
         dataHandler.getBoards(function(boards){
             let iterations = boards.length;
             let cardDiff = false;
