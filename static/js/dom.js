@@ -142,7 +142,7 @@ export let dom = {
             }
             boardList += `
                 <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}" data-id="${board.id}">
-                    <div class="board-header">
+                    <div class="board-header" board-header-id="${board.id}">
                         <span class="board-title">${board.title}</span>
                         <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
                         <button class="btn btn-dark float-right collapse-button" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
@@ -187,13 +187,13 @@ export let dom = {
         },
     addCardEventListener: function ()  {
         let newCardBtns = document.querySelectorAll('.new-card-btn');
-
         for (let cardBtn of newCardBtns) {
-            let boardId = cardBtn.getAttribute('board-id');
+            let boardId = cardBtn.getAttribute('board-header-id');
+            cardBtn.toggleStatus = "off";
             cardBtn.addEventListener('click', function () {
                 // let cardTitle = prompt("Please add a title");
                 let cardForm = `
-                    <form>
+                    <form new-card="form">
                     <input type="text" name="title">
                     <select name="status">
                         <option value="0">New</option>
@@ -204,7 +204,20 @@ export let dom = {
                     <input type="submit" id="new-card-submit" value="Save">
                     </form>
                     `
-                cardBtn.insertAdjacentHTML("afterend", cardForm);
+                let boardHeader = document.querySelector('div[board-header-id]');
+                switch (cardBtn.toggleStatus) {
+                    case "off":
+                        boardHeader.insertAdjacentHTML("afterend", cardForm);
+                        cardBtn.toggleStatus = "on";
+                        break;
+                    case "on":
+                        document.querySelector('form[new-card="form"]').remove()
+                        cardBtn.toggleStatus = "off";
+                        break;
+                }
+
+
+
 
                 let form = document.querySelector('form')
                 form.addEventListener('submit', event => {
@@ -254,7 +267,6 @@ export let dom = {
             dom.showCard(cards);
         })
     },
-
     showCards: function (cards) {
         // shows the cards of a board
         // it adds necessary event listeners also
@@ -300,7 +312,7 @@ export let dom = {
             }
         let childHTMLText = `
             <section class="board col mb-5 border border-dark" id="wholeBoard${board.id}" data-id="${board.id}">
-                <div class="board-header">
+                <div class="board-header" board-header-id="${board.id}">
                     <span class="board-title">${board.title}</span>
                     <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
                     <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
