@@ -7,20 +7,27 @@ export let dom = {
         let registrationButton = document.getElementById('registration-button');
         let loginButton = document.getElementById('login-button');
         let logoutButton = document.getElementById('logout-button');
+        let addPrivateBoardButton = document.querySelector('.add-private-board-btn')
         let registerSubmit = document.getElementById('reg-button');
         let loginSubmit = document.getElementById('login-submit-button');
         let boards = document.getElementById('boards');
         let registrationContainer = document.getElementById('registration-container');
+        let addPrivateBoardContainer = document.querySelector('.private-board-container')
         let loginContainer = document.getElementById('login-container');
+        if (!sessionStorage.getItem('user-id')) {
+            addPrivateBoardButton.style.display = 'none';
+        }
         homeButton.addEventListener('click', () => {
             registrationContainer.style.display = 'none';
             loginContainer.style.display = 'none';
             boards.style.display = 'block';
+            addPrivateBoardContainer.style.display = 'none';
         })
         registrationButton.addEventListener('click', () => {
             registrationContainer.style.display = 'flex';
             loginContainer.style.display = 'none';
             boards.style.display = 'none';
+            addPrivateBoardContainer.style.display = 'none';
         });
         loginButton.addEventListener('click', () => {
             loginContainer.style.display = 'flex';
@@ -29,6 +36,12 @@ export let dom = {
         });
         logoutButton.addEventListener('click', () => {
             sessionStorage.removeItem("userId");
+        })
+        addPrivateBoardButton.addEventListener('click', () => {
+            addPrivateBoardContainer.style.display = 'flex';
+            registrationContainer.style.display = 'none';
+            loginContainer.style.display = 'none';
+            boards.style.display = 'none';
         })
         registerSubmit.addEventListener('click', () => {
             let username = document.getElementById('username');
@@ -60,6 +73,7 @@ export let dom = {
                     sessionStorage.setItem("userId", response);
                     loginContainer.style.display = 'none';
                     boards.style.display = 'block';
+                    addPrivateBoardButton.style.display = 'inline-block';
                 }
             })
         })
@@ -87,6 +101,7 @@ export let dom = {
     loadBoards: function (sync=false, init=false) {
         this.saveShownCollapse();
         // retrieves boards and makes showBoards called
+        this.removeAllBoardElements();
         dataHandler.getBoards(function(boards){
             let iterations = boards.length;
             let cardDiff = false;
@@ -109,19 +124,19 @@ export let dom = {
                     }
                 })
             }
-        })
+        });
     },
     showBoards: function (boards) {
         // shows boards appending them to #boards div
         // it adds necessary event listeners also
 
-    let boardList = "";
+        let boardList = '';
 
         for(let board of boards){
             let columnlist = '';
             for (let column of board.board_statuses){
                 columnlist += `
-                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}">
+                <div class="col border border-dark p-0 ${dataHandler.camelize(column)}${board.id}" status="${dataHandler.camelize(column)}">
                     <div class="card-column-title text-center border-bottom border-dark mb-2">${column}</div>
                 </div>
                 `
@@ -131,7 +146,7 @@ export let dom = {
                     <div class="board-header">
                         <span class="board-title">${board.title}</span>
                         <button class="mc-button add-column" data-toggle="modal" data-target="#submitModal" data-board-id="${board.id}" data-submit-action="addColumn">Add column</button>
-                        <button class="btn btn-dark mt-2 float-right" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
+                        <button class="btn btn-dark float-right collapse-button" type="button" data-toggle="collapse" data-target="#board${board.id}" aria-expanded="false" aria-controls="board${board.id}">
                             &#x2304
                         </button>
                         <button class="new-card-btn" board-id="${board.id}">New Card</button>
@@ -170,7 +185,7 @@ export let dom = {
         });
         this.newNameBoardEventListener();
         this.initColumnTitleRename();
-    },
+        },
     addCardEventListener: function ()  {
         let newCardBtns = document.querySelectorAll('.new-card-btn');
 
@@ -259,20 +274,20 @@ export let dom = {
         this.createDropZone();
     },
     handleAddBoardClick: function (clickEvent) {
-      clickEvent.preventDefault();
-      let inputTitle = prompt("What is the title of the new board?");
-      if (!(inputTitle === "") && inputTitle) {
-        dataHandler.createNewBoard(inputTitle, (jsonResponse) => {
-          if (jsonResponse.title && jsonResponse.id) {
-            this.createNewChildBoard(jsonResponse);
-          } else {
-            window.alert(
-              "Could not get reply from server. Please wait and try again later."
-            );
-            // could maybe add a child that lives only until next _data update (next showBoards call)
-          }
-        });
-      }
+        clickEvent.preventDefault();
+        let inputTitle = prompt("What is the title of the new board?");
+        if (!(inputTitle === "") && inputTitle) {
+            dataHandler.createNewBoard(inputTitle, (jsonResponse) => {
+                if (jsonResponse.title && jsonResponse.id) {
+                    this.createNewChildBoard(jsonResponse);
+                } else {
+                    window.alert(
+                        "Could not get reply from server. Please wait and try again later."
+                    );
+                    // could maybe add a child that lives only until next _data update (next showBoards call)
+                }
+            });
+        }
     },
     createNewChildBoard: function (board) {
         const boardInnerContainer = document.querySelector(".board-container");
@@ -402,7 +417,7 @@ export let dom = {
     addNewColumn: function (boardId, columnTitle) {
         let board = document.querySelector(`#board${boardId}`);
         let newColumn = `
-        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}">
+        <div class="col border border-dark p-0 ${dataHandler.camelize(columnTitle)}${boardId}" status="${dataHandler.camelize(columnTitle)}">
             <div class="'card-column-title text-center border-bottom border-dark mb-2'">${columnTitle}</div>
         </div>
         `
@@ -429,52 +444,37 @@ export let dom = {
                 });
             }
     },
-  setUpDropZone: function (dropZone) {
-          for (let zone of dropZone) {
-              zone.addEventListener('dragover', event => {
-                  event.preventDefault();
-              })
-          };
-
-          for (let zone of dropZone) {
-              zone.addEventListener('drop', event => {
-                  let zoneStatus = zone.getAttribute('status');
-                  let droppedElementId = event.dataTransfer.getData("text/plain");
-                  let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
-                  zone.appendChild(droppedElement);
+    setUpDropZone: function (dropZone) {
+        for (let zone of dropZone) {
+            zone.addEventListener('dragover', event => {
+                event.preventDefault();
+            })
+        }
+        for (let zone of dropZone) {
+            zone.addEventListener('drop', event => {
+                let zoneStatus = zone.getAttribute('status');
+                let droppedElementId = event.dataTransfer.getData("text/plain");
+                let droppedElement = document.querySelector(`div[id="${droppedElementId}"]`);
+                zone.appendChild(droppedElement);
                     if (zoneStatus == 'new') {
-                        droppedElement.setAttribute('class', 'new');
-                        let postData = {'id': droppedElementId, 'status': '0'};
-                        // console.log(postData);
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'new','0');
                     } else if (zoneStatus == 'inProgress') {
-                        droppedElement.setAttribute('class', 'inProgress');
-                        let postData = {'id': droppedElementId, 'status': '1'};
-                        // console.log(postData);
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'inProgress','1');
                     } else if (zoneStatus == 'testing') {
-                        droppedElement.setAttribute('class', 'testing');
-                        let postData = {'id': droppedElementId, 'status': '2'};
-                        // console.log(postData);
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'testing','2');
                     } else if (zoneStatus == 'done') {
-                        droppedElement.setAttribute('class', 'done');
-                        let postData = {'id': droppedElementId, 'status': '3'};
-                        // console.log(postData);
-                        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
-                        dataHandler._data["cards"].push(jsonResponse);
-                        })
+                        this.setCardStatus(droppedElement,droppedElementId,'done','3');
                     }
-
                 });
             }
         },
+    setCardStatus: function (droppedElement, droppedElementId, statusName, statusId) {
+        droppedElement.setAttribute('class', `card mx-0 mb-2 border border-dark text-center ${statusName}`);
+        let postData = {'id': droppedElementId, 'status': statusId};
+        dataHandler._api_post('/update-card', postData, (jsonResponse) => {
+        dataHandler._data["cards"].push(jsonResponse);
+        })
+    },
     initManualSync: function () {
         let syncButton = document.querySelector('.sync-button');
         syncButton.addEventListener('click', () => {
