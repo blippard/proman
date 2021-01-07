@@ -1,5 +1,8 @@
 /venv/
 
+# Do not track shell scripts (local vars)
+*.sh
+
 # Temporary folder
 /temp/
 
