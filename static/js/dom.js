@@ -99,8 +99,8 @@ export let dom = {
         return response.json()
     },
     loadBoards: function (sync=false, init=false) {
+        this.saveShownCollapse();
         // retrieves boards and makes showBoards called
-        this.removeAllBoardElements();
         dataHandler.getBoards(function(boards){
             let iterations = boards.length;
             let cardDiff = false;
@@ -154,7 +154,7 @@ export let dom = {
                         </button>
                         <button class="remove-board-btn mc-button">Delete Board <img src="/static/css/images/trashcan.png" height="30" alt="&#x1F5D1"></button>                       
                     </div>
-                    <div class="row collapse" id="board${board.id}">
+                    <div class="${syncCache['shownBoards'].includes('board' + board.id) ? 'row collapse show' : 'row collapse'}" id="board${board.id}">
                         ${columnlist}
                     </div>
                 </section>
@@ -288,18 +288,6 @@ export let dom = {
             });
         }
     },
-    createDropZone: function () {
-        let dropZone = document.querySelectorAll('.col.border.border-dark.p-0');
-        let cards = document.querySelectorAll('div[card="true"]');
-
-        for (let card of cards) {
-            card.addEventListener('dragstart', event => {
-                event.dataTransfer.setData("text/plain", card.id);
-            });
-        };
-        dom.setUpDropZone(dropZone);
-
-    },
     createNewChildBoard: function (board) {
         const boardInnerContainer = document.querySelector(".board-container");
         let columnlist = '';
@@ -341,7 +329,7 @@ export let dom = {
 
         let newRemoveBoardBtn = boardInnerContainer.lastElementChild.querySelector(
             ".remove-board-btn"
-        );   
+        );
         newRemoveBoardBtn.addEventListener("click", (event) => {
             this.handleRemoveBoardClick(
                 newRemoveBoardBtn.parentNode.parentNode,
@@ -353,7 +341,7 @@ export let dom = {
     handleRemoveBoardClick: function (boardNode, clickEvent) {
         // boardNode is the node in the DOM tree corresponding to a board HTML element
         // and, thus, element and node are interchangeable for almost all purposes
-        clickEvent.preventDefault();        
+        clickEvent.preventDefault();
         let boardId = boardNode.dataset.id
         dataHandler.deleteBoard(boardId, (jsonResponse) => {
         if (!(jsonResponse.id)) {
@@ -392,7 +380,7 @@ export let dom = {
             dom.setUpDropZone(dropZone);
 
     },
-    
+
     // here comes more features
     removeAllBoardElements: function () {
         let allBoards = document.querySelector('#boards');
@@ -495,7 +483,6 @@ export let dom = {
     initAutoSync: function () {
         setInterval(() => {
             if (document.querySelector('.auto-sync-toggle').dataset['toggle'] === 'on') {
-                console.log('test');
                 this.loadBoards(true);
             }
         }, 5000)
@@ -511,5 +498,12 @@ export let dom = {
                 toggleBtn.innerText = 'Auto-sync: Off';
             }
         })
+    },
+    saveShownCollapse: function () {
+        let shownBoards = document.querySelectorAll('.row.collapse.show');
+        syncCache['shownBoards'] = [];
+        for (let board of shownBoards) {
+            syncCache['shownBoards'].push(board.id);
+        }
     }
 };
