@@ -1,12 +1,13 @@
 // It uses data_handler.js to visualize elements
 import {dataHandler} from "./data_handler.js";
-
+let syncCache = {};
 export let dom = {
     init: function () {
         let homeButton = document.getElementById('home');
         let registrationButton = document.getElementById('registration-button');
-        let registerSubmit = document.getElementById('reg-button');
         let loginButton = document.getElementById('login-button');
+        let logoutButton = document.getElementById('logout-button');
+        let registerSubmit = document.getElementById('reg-button');
         let loginSubmit = document.getElementById('login-submit-button');
         let boards = document.getElementById('boards');
         let registrationContainer = document.getElementById('registration-container');
@@ -18,12 +19,17 @@ export let dom = {
         })
         registrationButton.addEventListener('click', () => {
             registrationContainer.style.display = 'flex';
+            loginContainer.style.display = 'none';
             boards.style.display = 'none';
         });
         loginButton.addEventListener('click', () => {
             loginContainer.style.display = 'flex';
+            registrationContainer.style.display = 'none';
             boards.style.display = 'none';
         });
+        logoutButton.addEventListener('click', () => {
+            sessionStorage.removeItem("userId");
+        })
         registerSubmit.addEventListener('click', () => {
             let username = document.getElementById('username');
             let password = document.getElementById('password');
@@ -63,6 +69,9 @@ export let dom = {
         newBoardBtn.addEventListener("click", (event) => {
             this.handleAddBoardClick(event);
         });
+        this.initManualSync();
+        this.initAutoSync();
+        this.initAutoSyncToggle();
     },
     postdata: async function (url = '', data) {
         const response = await fetch(url, {
@@ -75,15 +84,32 @@ export let dom = {
         )
         return response.json()
     },
-    loadBoards: function () {
+    loadBoards: function (sync=false, init=false) {
+        this.saveShownCollapse();
         // retrieves boards and makes showBoards called
-        this.removeAllBoardElements();
         dataHandler.getBoards(function(boards){
-            dom.showBoards(boards);
+            let iterations = boards.length;
+            let cardDiff = false;
             for (let board of boards) {
-                dom.loadCards(board.id);
+                dataHandler.getCardsByBoardId(board.id, function (card) {
+                    if (JSON.stringify(syncCache[`board${board.id}cards`]) !== JSON.stringify(card)){
+                        cardDiff = true;
+                    }
+                    if (!--iterations) {
+                        if (sync === false || JSON.stringify(syncCache['boards']) !== JSON.stringify(boards) || cardDiff === true) {
+                            if (init === false) {
+                                dom.removeAllBoardElements();
+                            }
+                            syncCache['boards'] = boards;
+                            dom.showBoards(boards);
+                            for (let board of boards) {
+                                dom.loadCards(board.id);
+                            }
+                    }
+                    }
+                })
             }
-        });
+        })
     },
     showBoards: function (boards) {
         // shows boards appending them to #boards div
@@ -114,7 +140,7 @@ export let dom = {
                         </button>
                         <button class="remove-board-btn mc-button">Delete Board <img src="/static/css/images/trashcan.png" height="30" alt="&#x1F5D1"></button>                       
                     </div>
-                    <div class="row collapse" id="board${board.id}">
+                    <div class="${syncCache['shownBoards'].includes('board' + board.id) ? 'row collapse show' : 'row collapse'}" id="board${board.id}">
                         ${columnlist}
                     </div>
                 </section>
@@ -204,6 +230,7 @@ export let dom = {
     loadCards: function (boardId) {
         // retrieves cards and makes showCards called
         dataHandler.getCardsByBoardId(boardId, function (cards) {
+            syncCache[`board${boardId}cards`] = cards;
             dom.showCards(cards);
         })
     },
@@ -288,7 +315,7 @@ export let dom = {
 
         let newRemoveBoardBtn = boardInnerContainer.lastElementChild.querySelector(
             ".remove-board-btn"
-        );   
+        );
         newRemoveBoardBtn.addEventListener("click", (event) => {
             this.handleRemoveBoardClick(
                 newRemoveBoardBtn.parentNode.parentNode,
@@ -300,7 +327,7 @@ export let dom = {
     handleRemoveBoardClick: function (boardNode, clickEvent) {
         // boardNode is the node in the DOM tree corresponding to a board HTML element
         // and, thus, element and node are interchangeable for almost all purposes
-        clickEvent.preventDefault();        
+        clickEvent.preventDefault();
         let boardId = boardNode.dataset.id
         dataHandler.deleteBoard(boardId, (jsonResponse) => {
         if (!(jsonResponse.id)) {
@@ -339,7 +366,7 @@ export let dom = {
             dom.setUpDropZone(dropZone);
 
     },
-    
+
     // here comes more features
     removeAllBoardElements: function () {
         let allBoards = document.querySelector('#boards');
@@ -444,7 +471,40 @@ export let dom = {
                         dataHandler._data["cards"].push(jsonResponse);
                         })
                     }
-              });
-          }
-      },
+
+                });
+            }
+        },
+    initManualSync: function () {
+        let syncButton = document.querySelector('.sync-button');
+        syncButton.addEventListener('click', () => {
+            this.loadBoards(true);
+        })
+    },
+    initAutoSync: function () {
+        setInterval(() => {
+            if (document.querySelector('.auto-sync-toggle').dataset['toggle'] === 'on') {
+                this.loadBoards(true);
+            }
+        }, 5000)
+    },
+    initAutoSyncToggle: function () {
+        let toggleBtn = document.querySelector('.auto-sync-toggle');
+        toggleBtn.addEventListener('click', () => {
+            if (toggleBtn.dataset['toggle'] === 'off') {
+                toggleBtn.dataset['toggle'] = 'on';
+                toggleBtn.innerText = 'Auto-sync: On';
+            } else {
+                toggleBtn.dataset['toggle'] = 'off';
+                toggleBtn.innerText = 'Auto-sync: Off';
+            }
+        })
+    },
+    saveShownCollapse: function () {
+        let shownBoards = document.querySelectorAll('.row.collapse.show');
+        syncCache['shownBoards'] = [];
+        for (let board of shownBoards) {
+            syncCache['shownBoards'].push(board.id);
+        }
+    }
 };
