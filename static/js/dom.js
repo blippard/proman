@@ -188,7 +188,7 @@ export let dom = {
     addCardEventListener: function ()  {
         let newCardBtns = document.querySelectorAll('.new-card-btn');
         for (let cardBtn of newCardBtns) {
-            let boardId = cardBtn.getAttribute('board-header-id');
+            let boardId = cardBtn.getAttribute('board-id');
             cardBtn.toggleStatus = "off";
             cardBtn.addEventListener('click', function () {
                 // let cardTitle = prompt("Please add a title");
@@ -204,7 +204,7 @@ export let dom = {
                     <input type="submit" id="new-card-submit" value="Save">
                     </form>
                     `
-                let boardHeader = document.querySelector('div[board-header-id]');
+                let boardHeader = document.querySelector(`div[board-header-id="${boardId}"]`);
                 switch (cardBtn.toggleStatus) {
                     case "off":
                         boardHeader.insertAdjacentHTML("afterend", cardForm);
@@ -213,7 +213,7 @@ export let dom = {
                     case "on":
                         document.querySelector('form[new-card="form"]').remove()
                         cardBtn.toggleStatus = "off";
-                        break;
+                        break; stego
                 }
 
 
